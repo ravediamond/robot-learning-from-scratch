@@ -1,8 +1,8 @@
 # Reference: your own book, papers and register
 
-Snapshot copied from `road-to-robotics` at commit `2c24b56` (2026-11-03). Read-only here:
-the source of truth stays in `road-to-robotics`. Re-sync by copying `journal/book`,
-`journal/papers` and the four register files again.
+Snapshot of `road-to-robotics` (commit and date in `SNAPSHOT.txt`). Read-only here: the source of truth
+stays in `road-to-robotics`, and the Orin keeps changing it. Refresh weekly (Monday, 1 min):
+`bash scripts/sync_reference.sh ~/src/road-to-robotics`, then re-run W8 D4's tests.
 
 | Path | What | When to use it |
 |---|---|---|

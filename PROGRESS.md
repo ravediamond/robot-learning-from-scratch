@@ -129,6 +129,19 @@ Mark each column honestly: ✅ done alone · 🟡 needed a hint · ❌ looked at
 - Pace (too easy / right / too hard):
 - What to change:
 
+## Reading slot (20 min a week)
+| Week | File | Time | Misses vs the map | Question for the author |
+|---|---|---|---|---|
+| 1 |  |  |  |  |
+| 2 |  |  |  |  |
+| 3 |  |  |  |  |
+| 4 |  |  |  |  |
+| 5 |  |  |  |  |
+| 6 |  |  |  |  |
+| 7 |  |  |  |  |
+| 8 |  |  |  |  |
+| 9 |  |  |  |  |
+
 ## Real-data results (your Mac)
 | Script | Numbers | Matches the register? |
 |---|---|---|

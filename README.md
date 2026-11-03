@@ -25,6 +25,9 @@ uv run pytest weeks/w1-pytorch-basics/d1-tensors-shapes   # should FAIL: you hav
 
 Plus **15 min LeetCode drill** (`drills/`), on any day you can.
 
+Plus, **once a week, 20 min reading slot** (`reading/`): one real file (LeRobot, your harness), read only,
+10-line note. That is the skill you need to check Claude Code's work on the Orin.
+
 On 2-hour days: delete your solution and redo the lab from a blank file, no notes.
 Then read the knowledge primer for the week (`knowledge/`).
 
@@ -49,6 +52,8 @@ Then read the knowledge primer for the week (`knowledge/`).
 - `reference/`: your own book, paper drafts and register (snapshot from `road-to-robotics`).
   Labs and primers link into it. The book's live-coding list (`exercises/coding/README.md`)
   is what these labs make runnable, with tests.
+- `reading/`: the weekly read-only slot (protocol, template, one real file per week)
+- `scripts/sync_reference.sh`: refresh `reference/` from your road-to-robotics clone
 - `PROGRESS.md`: your tracker
 
 ## Why these three skills
