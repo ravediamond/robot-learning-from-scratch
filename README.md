@@ -41,7 +41,7 @@ Then read the knowledge primer for the week (`knowledge/`).
 
 ## Map
 
-- `CURRICULUM.md`: the 8 weeks, day by day
+- `CURRICULUM.md`: the 9 weeks, day by day (all written)
 - `weeks/`: the labs
 - `drills/`: LeetCode-style problems, robotics-flavored, with tests
 - `knowledge/`: dense primers (VLM, VLA, JEPA, world models, diffusion, eval) with
