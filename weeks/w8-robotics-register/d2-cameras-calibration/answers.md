@@ -1,0 +1,8 @@
+# Model answers
+
+1. Intrinsics: the camera's internal projection (focal lengths, principal point, distortion): measured once with a checkerboard (OpenCV calibrateCamera), fixed unless zoom/focus changes. Extrinsics: the camera's pose in the robot/world frame: measured by hand-eye calibration; changes as soon as the camera is bumped or the mount flexes.
+2. At grasp time the wrist camera is a few cm from the object: the object fills many pixels (high effective resolution, 1 px ≈ sub-mm), the view is stable relative to the gripper, and occlusion by the arm is reduced. A top camera at 0.5–1 m sees the object at ~12–24 px with ~1 mm/px: enough to locate, not to align precisely.
+3. Eye-in-hand: the camera moves with the gripper (wrist camera): solve for the camera-to-gripper transform (AX = XB). Eye-to-hand: fixed camera watching the robot (top camera): solve for camera-to-base (the rigid fit of today). The SO-101 setup has both: wrist = eye-in-hand, top = eye-to-hand.
+4. When the best least-squares orthogonal fit has det −1: noisy, nearly planar or degenerate point sets (or truly mirrored data). A reflection is not a physical motion: applying it to the robot would mirror the scene (left/right swaps). The sign fix forces the closest proper rotation.
+5. At the image centre the point is on the optical axis: distance = Z, so the result is right exactly where people usually check. The error grows with the angle off-axis (distance = Z / cos θ).
+6. The camera mount sagged or was nudged (extrinsics changed), or lighting changed (sun through a window) → images differ from training. Check: overlay a reference frame from the morning on a current one (or reproject a known marker), compare pixel offsets; check exposure/brightness histograms.

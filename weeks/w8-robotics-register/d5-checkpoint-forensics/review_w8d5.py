@@ -1,13 +1,16 @@
-"""REVIEW. Loads a pretrained policy before fine-tuning. "The fine-tune starts from the
-pretrained weights" says the log. The fine-tuned policy is no better than training from scratch.
-Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: strict=False with the result ignored: when the keys don't match (a "model." prefix here) NOTHING is
+loaded, the model stays random, and the log still says "loaded". Load strictly (or check missing /
+unexpected keys and the count), and fail loudly.
 """
 import torch
 
 
-def load_pretrained(model, path: str):
+def load_pretrained(model, path):
     sd = torch.load(path, weights_only=True)
-    model.load_state_dict(sd, strict=False)
-    print("loaded pretrained weights from", path)
+    res = model.load_state_dict(sd, strict=False)
+    if res.missing_keys or res.unexpected_keys:
+        raise RuntimeError(f"checkpoint mismatch: missing {res.missing_keys[:5]}, unexpected {res.unexpected_keys[:5]}")
+    print(f"loaded {len(sd)} tensors from {path}")
     return model

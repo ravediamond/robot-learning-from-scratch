@@ -1,11 +1,12 @@
-"""REVIEW. Rotation about y for the SO-101's pitch joints. FK runs, poses look plausible, but when
-the shoulder 'lifts' the simulated arm goes DOWN into the table. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: the matrix is the TRANSPOSE of Ry(t) (= Ry(-t)): every pitch joint turns the wrong way. It is still a
+valid rotation (orthonormal, det 1), so nothing crashes and poses look plausible. Check: Ry(+90) x = -z.
 """
 import torch
 
 
-def rot_y(t: torch.Tensor) -> torch.Tensor:
+def rot_y(t):
     c, s = torch.cos(t), torch.sin(t)
     one, zero = torch.ones_like(t), torch.zeros_like(t)
-    return torch.stack([torch.stack([c, zero, -s]), torch.stack([zero, one, zero]), torch.stack([s, zero, c])])
+    return torch.stack([torch.stack([c, zero, s]), torch.stack([zero, one, zero]), torch.stack([-s, zero, c])])

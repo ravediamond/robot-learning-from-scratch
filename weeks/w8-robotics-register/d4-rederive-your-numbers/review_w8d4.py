@@ -1,16 +1,19 @@
-"""REVIEW. Averages a monitor's scores over 5 seeds per episode before computing AUROC. The result
-does not match the paper's 0.8377 for W1 and changes when the CSV rows are reordered.
-Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: view(-1, n_seeds) assumes rows are ordered episode-major (all seeds of episode 0, then episode 1...).
+The CSV is seed-major, so each "row" of the view mixes different episodes. Group explicitly by episode.
 """
 import csv
+from collections import defaultdict
 
 import torch
 
 
-def seed_averaged_scores(path, feature: str) -> tuple[torch.Tensor, torch.Tensor]:
-    rows = [r for r in csv.DictReader(open(path)) if r["feature"] == feature]
-    n_seeds = len({r["seed"] for r in rows})
-    scores = torch.tensor([float(r["score"]) for r in rows]).view(-1, n_seeds).mean(1)
-    labels = torch.tensor([int(r["label"]) for r in rows]).view(-1, n_seeds)[:, 0]
-    return scores, labels
+def seed_averaged_scores(path, feature):
+    by_ep, lab = defaultdict(list), {}
+    for r in csv.DictReader(open(path)):
+        if r["feature"] == feature:
+            by_ep[int(r["episode"])].append(float(r["score"]))
+            lab[int(r["episode"])] = int(r["label"])
+    eps = sorted(by_ep)
+    return torch.tensor([sum(by_ep[e]) / len(by_ep[e]) for e in eps]), torch.tensor([lab[e] for e in eps])
