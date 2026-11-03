@@ -1,45 +1,47 @@
-"""W1 D3: autograd. Do the math on paper first, then code it."""
+"""W1 D3: SOLUTION."""
 from typing import Callable
 
 import torch
 
 
-def linear_mse_grads(x: torch.Tensor, W: torch.Tensor, b: torch.Tensor,
-                     y: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-    """Gradients of L = mean((x @ W.T + b - y)**2), computed BY HAND (no .backward()).
-
-    x: (N, I), W: (O, I), b: (O,), y: (N, O). Returns dW (O, I), db (O,).
-    """
-    # TODO
-    raise NotImplementedError
+def linear_mse_grads(x, W, b, y):
+    N, O = y.shape
+    pred = x @ W.T + b                     # (N, O)
+    g = 2.0 * (pred - y) / (N * O)         # dL/dpred, (N, O)
+    dW = g.T @ x                           # (O, N) @ (N, I) -> (O, I)
+    db = g.sum(dim=0)                      # (O,)
+    return dW, db
 
 
 def finite_diff_grad(f: Callable[[torch.Tensor], torch.Tensor], x: torch.Tensor,
                      eps: float = 1e-5) -> torch.Tensor:
-    """Central-difference gradient of a scalar function f at x. Returns same shape as x.
-
-    Loop over elements is fine here (it is a checker, not training code).
-    Do not modify x in the caller's view: work on a clone.
-    """
-    # TODO
-    raise NotImplementedError
-
-
-def fit_line(x: torch.Tensor, y: torch.Tensor, lr: float = 0.1,
-             steps: int = 500) -> tuple[float, float]:
-    """Fit y ≈ w * x + b with plain gradient descent and autograd (no torch.optim).
-
-    x, y: (N,). Start from w = b = 0. Loss: mean squared error. Return (w, b) as floats.
-    """
-    # TODO
-    raise NotImplementedError
+    x = x.clone()
+    grad = torch.zeros_like(x)
+    flat_x, flat_g = x.view(-1), grad.view(-1)
+    for i in range(flat_x.numel()):
+        old = flat_x[i].item()
+        flat_x[i] = old + eps
+        f_plus = f(x).item()
+        flat_x[i] = old - eps
+        f_minus = f(x).item()
+        flat_x[i] = old
+        flat_g[i] = (f_plus - f_minus) / (2 * eps)
+    return grad
 
 
-def stop_gradient_mse(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-    """MSE between pred and target where NO gradient flows into target.
+def fit_line(x, y, lr: float = 0.1, steps: int = 500):
+    w = torch.zeros((), requires_grad=True)
+    b = torch.zeros((), requires_grad=True)
+    for _ in range(steps):
+        loss = ((w * x + b - y) ** 2).mean()
+        loss.backward()
+        with torch.no_grad():
+            w -= lr * w.grad
+            b -= lr * b.grad
+        w.grad.zero_()
+        b.grad.zero_()
+    return w.item(), b.item()
 
-    Both may require grad. After loss.backward(), target's graph must receive nothing.
-    This is the stop-gradient used on the target branch of JEPA / BYOL.
-    """
-    # TODO
-    raise NotImplementedError
+
+def stop_gradient_mse(pred, target):
+    return ((pred - target.detach()) ** 2).mean()

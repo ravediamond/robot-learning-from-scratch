@@ -1,6 +1,7 @@
-"""REVIEW. A scalar gain is fitted to calibration data (y = gain * x).
-It runs without error and returns a number. Find the bug, fix it, replace this line:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: w.grad is never zeroed, so each step applies the SUM of all past gradients: momentum with
+no decay. w overshoots and oscillates around 3 instead of converging.
 """
 import torch
 
@@ -12,4 +13,5 @@ def fit_gain(x: torch.Tensor, y: torch.Tensor, lr: float = 0.1, steps: int = 300
         loss.backward()
         with torch.no_grad():
             w -= lr * w.grad
+        w.grad.zero_()
     return w.item()

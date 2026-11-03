@@ -1,19 +1,15 @@
-"""REVIEW. Splitting a LeRobot-style dataset into train/val. `episode_index` gives, for every
-frame, which episode it belongs to (as in LeRobotDataset). The resulting val loss was
-excellent. Find the bug, fix it, replace this line:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: frames are split at random, so almost every val frame has its near-duplicate neighbors in
+train (same episode): val loss measures memorization, not generalization to new episodes.
+Fix: choose val EPISODES, then mark all their frames.
 """
 import torch
 
 
 def make_val_mask(episode_index: torch.Tensor, val_frac: float = 0.2, seed: int = 0) -> torch.Tensor:
-    """episode_index: (N,) long. Returns a (N,) bool mask, True for validation frames.
-
-    About val_frac of the data goes to validation.
-    """
     g = torch.Generator().manual_seed(seed)
-    N = episode_index.shape[0]
-    perm = torch.randperm(N, generator=g)
-    mask = torch.zeros(N, dtype=torch.bool)
-    mask[perm[: int(val_frac * N)]] = True
-    return mask
+    episodes = torch.unique(episode_index)
+    perm = episodes[torch.randperm(len(episodes), generator=g)]
+    val_eps = perm[: max(1, round(val_frac * len(episodes)))]
+    return torch.isin(episode_index, val_eps)

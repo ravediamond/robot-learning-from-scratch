@@ -1,56 +1,47 @@
-"""W1 D1: tensors and shapes. Fill every TODO. Comment every tensor line with its shape."""
+"""W1 D1: tensors and shapes. SOLUTION."""
 import torch
 
 
 def to_tensor(rows: list[list[float]]) -> torch.Tensor:
-    """List of rows -> float32 tensor of shape (len(rows), len(rows[0]))."""
-    # TODO
-    raise NotImplementedError
+    return torch.tensor(rows, dtype=torch.float32)  # (N, D)
 
 
 def flatten_time(x: torch.Tensor) -> torch.Tensor:
-    """(B, T, D) -> (B*T, D). Must work even if x is not contiguous."""
-    # TODO
-    raise NotImplementedError
+    B, T, D = x.shape
+    return x.reshape(B * T, D)  # reshape, not view: x may be non-contiguous
 
 
 def unflatten_time(x: torch.Tensor, B: int, T: int) -> torch.Tensor:
-    """(B*T, D) -> (B, T, D). Inverse of flatten_time."""
-    # TODO
-    raise NotImplementedError
+    return x.reshape(B, T, x.shape[-1])  # (B, T, D)
 
 
 def pad_episodes(episodes: list[torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]:
-    """Episodes of shape (T_i, D) with different T_i.
-
-    Returns:
-        padded: (N, T_max, D) float tensor, zeros after each episode ends
-        mask:   (N, T_max) bool tensor, True on real steps, False on padding
-    """
-    # TODO
-    raise NotImplementedError
+    N = len(episodes)
+    T_max = max(e.shape[0] for e in episodes)
+    D = episodes[0].shape[1]
+    padded = torch.zeros(N, T_max, D, dtype=episodes[0].dtype)  # (N, T_max, D)
+    mask = torch.zeros(N, T_max, dtype=torch.bool)  # (N, T_max)
+    for i, e in enumerate(episodes):
+        T_i = e.shape[0]
+        padded[i, :T_i] = e
+        mask[i, :T_i] = True
+    return padded, mask
+    # Built-in alternative: torch.nn.utils.rnn.pad_sequence(episodes, batch_first=True)
 
 
 def normalize(x: torch.Tensor, mean: torch.Tensor, std: torch.Tensor, eps: float = 1e-8) -> torch.Tensor:
-    """Per-feature z-score. x: (..., D), mean and std: (D,). Returns same shape as x.
-
-    eps protects joints that never move (std == 0), e.g. a gripper that stayed open.
-    """
-    # TODO
-    raise NotImplementedError
+    # mean/std (D,) broadcast against the last dim of x (..., D)
+    return (x - mean) / (std + eps)
 
 
 def action_chunks(actions: torch.Tensor, H: int) -> torch.Tensor:
-    """All windows of H consecutive actions.
-
-    actions: (T, D)  ->  chunks: (T - H + 1, H, D), with chunks[t] == actions[t : t + H].
-    Hint: Tensor.unfold, then check where it puts the window dimension.
-    """
-    # TODO
-    raise NotImplementedError
+    # unfold(0, H, 1) on (T, D) -> (T-H+1, D, H): the window dim goes LAST
+    return actions.unfold(0, H, 1).permute(0, 2, 1)  # (T-H+1, H, D)
 
 
 def pick_device() -> torch.device:
-    """mps if available, else cuda if available, else cpu."""
-    # TODO
-    raise NotImplementedError
+    if torch.backends.mps.is_available():
+        return torch.device("mps")
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    return torch.device("cpu")

@@ -1,8 +1,8 @@
 def merge_segments(segments: list[tuple[int, int]]) -> list[tuple[int, int]]:
-    """A failure detector flags frame segments [start, end] (inclusive). Segments may overlap
-    or touch (end + 1 == next start counts as touching). Merge them; return sorted by start.
-
-    merge_segments([(8, 10), (1, 3), (2, 6), (11, 12)]) -> [(1, 6), (8, 12)]
-    """
-    # TODO
-    raise NotImplementedError
+    out: list[tuple[int, int]] = []
+    for s, e in sorted(segments):
+        if out and s <= out[-1][1] + 1:
+            out[-1] = (out[-1][0], max(out[-1][1], e))
+        else:
+            out.append((s, e))
+    return out
