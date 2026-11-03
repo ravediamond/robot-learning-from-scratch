@@ -1,4 +1,4 @@
-# Curriculum: 8 weeks, 40 sessions
+# Curriculum: 9 weeks, 45 sessions
 
 Each week ends with a Friday lab that ties the week to a robot. Labs for week N+1
 are written after week N is done, so the level adjusts to how it actually went.
@@ -16,7 +16,8 @@ Legend: **Build** = graded exercise · **Review** = planted bug · **K** = knowl
 
 ## Week 2: Training properly + CNN encoders
 Data pipelines (Dataset/DataLoader, collate, padding) · initialization and why loss at step 0 should be ln(K) or Var(y) · LR finder and warmup · gradient clipping · NaN hunting · CNN encoder from scratch, receptive field · BatchNorm vs LayerNorm vs GroupNorm (and why policies avoid BatchNorm) · image augmentation for policies (random shift).
-Friday: train a pixel → action encoder on rendered toy frames.
+Mon–Wed cover the list above.
+**Capstone (Thu + Fri): your real SO-101 data.** Thu: load your own dataset from the Hugging Face Hub as a LeRobotDataset, no helper code: episode index, timestamps, (obs_t, action_{t:t+H}) windows with tail padding + mask, episode split, train-only stats. Measure: frames/s of video decoding vs model step time (is the GPU waiting on data?). Fri: a CNN pixel+state → action-chunk policy trained on a few real episodes at low resolution, against hold-position and against your week-1 state-only MLP. Questions on what real data does that toy data didn't (gaps, dropped frames, operator pauses, gripper noise).
 
 ## Week 3: Attention and transformers  · K: `01-transformers-attention`
 Scaled dot-product attention by hand · causal and padding masks · multi-head · transformer block (pre-norm, residual, MLP) · positional encodings (sinusoidal, learned, RoPE) · ViT patchify · cross-attention · KV cache.
@@ -31,15 +32,18 @@ CLIP contrastive loss (InfoNCE) from scratch · image tokens into a language mod
 Friday: a mini VLA built from your own parts: your GPT blocks (week 3) + your flow head (week 4), joined by cross-attention.
 
 ## Week 6: Robot learning and evaluation  · K: `07-robot-eval-statistics`
-Compounding error and DAgger · ACT (CVAE + chunks) · state/action normalization pitfalls · success-rate statistics: binomial CI, episode bootstrap, paired comparisons, how many trials you need · failure detection (score thresholds, conformal calibration) · reward models from progress.
-Friday: evaluate two policies honestly; decide which is better with a pre-registered bar.
+Mon: ACT (CVAE + chunks + temporal ensembling) · Tue: success-rate statistics: Wilson CI, episode bootstrap, paired comparisons (McNemar), how many trials you need · Wed: failure detection (score thresholds, conformal calibration, AUROC, the length null) and reward models from progress.
+**Capstone (Thu + Fri): closed-loop sim + DAgger.** A small 2D arm-reaching / obstacle world (provided physics, ~100 lines); you write the rollout loop, the reset, success/collision checks and the evaluator. Thu: plug in your BC (week 1), flow head (week 4) and mini VLA (week 5); show that val MSE ranks them differently from closed-loop success; watch compounding error grow with episode length. Fri: DAgger (scripted expert relabels the states your policy visits), 3 iterations; success rate with a Wilson CI and a pre-registered bar, paired against plain BC on the same start states. From here on, every policy you build is judged in this sim.
 
 ## Week 7: JEPA and world models  · K: `05-jepa-ssl`, `06-world-models-planning`
 Representation collapse and why it happens · VICReg, SIGReg-style Gaussian regularizer, EMA target encoders · masked latent prediction (I-JEPA / V-JEPA) · action-conditioned latent dynamics (LeWM-mini) · CEM / MPPI planning in latent space · world model as evaluator: surprise, failure prediction · RSSM in one page.
 **Capstone (Thu + Fri): JEPA world model from scratch (mini LeWM).** Thu: CNN encoder + action-conditioned predictor on 64×64 toy pixels; first train with no regularizer and watch it collapse; then add your own SIGReg (variant: EMA + stop-gradient). Tests: SIGReg separates constant from Gaussian embeddings; beats copy-last; linear probe recovers position (R² > 0.9, held-out episodes). Fri: CEM planning to a goal image (success vs random actions, Wilson CI); surprise on an injected teleport event (AUROC + CI).
 
-## Week 8: Robotics basics, your own register, mock interviews  · K: `08-question-bank`
-Mon: FK/IK for a 5-DoF arm (SO-101), Jacobians, frames · Tue: cameras, intrinsics/extrinsics, hand-eye calibration, control rate and latency · Wed: your register, re-derived by hand (gate verdicts, CIs, the checkpoint-loading bug, why best-of-N reranking failed) · Thu: timed mock coding (45 min: attention or flow-matching loss from a blank file) + "fix this training script" · Fri: research discussion mock (paper → experiment → verdict) + system design (a data flywheel on edge hardware).
+## Week 8: Robotics basics and your own register
+Mon: FK/IK for a 5-DoF arm (SO-101), Jacobians, frames · Tue: cameras, intrinsics/extrinsics, hand-eye calibration · Wed: control rate and latency; a real-time chunking simulator (coding list 13: inference delay, prefix freeze, boundary jerk) run against your sim · Thu–Fri: your register, re-derived by hand from raw files (gate verdicts, CIs, the checkpoint-loading bug, why best-of-N reranking failed, the length null for failure monitors). Rule: a number you cannot re-derive does not go in an interview.
+
+## Week 9: Mock interviews  · K: `08-question-bank`
+Mon: distributed training by hand: DDP with 2 CPU processes (gloo), DistributedSampler, seeds, effective batch and lr, checkpoint/resume after a kill · Tue: timed mock coding (45 min from a blank file: attention, flow-matching loss + sampler, CEM) · Wed: "fix this training script" (several planted bugs, 45 min) · Thu: research discussion mock (paper → experiment → verdict) + your-work deep dive · Fri: system design (a data flywheel on edge hardware) + pushback round, recorded, then a final retro.
 
 ## LeetCode drills (15 min, any day)
 Week 1: hash map, stack, sliding window + deque, intervals, binary search.
