@@ -1,0 +1,210 @@
+{
+ "aac_bar_ms": {
+  "value": "298",
+  "anchor": "AAC gates 0 / 1, .../2026-10-30-paper-vs-hardware-adaptive-chunking/expected/gate0.json, gate1_latency.json"
+ },
+ "aac_fixed_jump": {
+  "value": "0.940",
+  "anchor": "AAC gates 0 / 1, .../2026-10-30-paper-vs-hardware-adaptive-chunking/expected/gate0.json, gate1_latency.json"
+ },
+ "aac_h_grasp": {
+  "value": "2",
+  "anchor": "AAC gates 0 / 1, .../2026-10-30-paper-vs-hardware-adaptive-chunking/expected/gate0.json, gate1_latency.json"
+ },
+ "aac_h_transport": {
+  "value": "2",
+  "anchor": "AAC gates 0 / 1, .../2026-10-30-paper-vs-hardware-adaptive-chunking/expected/gate0.json, gate1_latency.json"
+ },
+ "aac_jump": {
+  "value": "0.973",
+  "anchor": "AAC gates 0 / 1, .../2026-10-30-paper-vs-hardware-adaptive-chunking/expected/gate0.json, gate1_latency.json"
+ },
+ "aac_n20_ms": {
+  "value": "4,751",
+  "anchor": "AAC gates 0 / 1, .../2026-10-30-paper-vs-hardware-adaptive-chunking/expected/gate0.json, gate1_latency.json"
+ },
+ "bar_aac": {
+  "value": "581a955",
+  "anchor": "first commit of the gate's protocol (git log --diff-filter=A)"
+ },
+ "bar_glat": {
+  "value": "82fdc15",
+  "anchor": "first commit of the gate's protocol (git log --diff-filter=A)"
+ },
+ "bar_hd": {
+  "value": "0a79846",
+  "anchor": "first commit of the gate's protocol (git log --diff-filter=A)"
+ },
+ "bar_pact": {
+  "value": "0a79846",
+  "anchor": "first commit of the gate's protocol (git log --diff-filter=A)"
+ },
+ "bar_sm": {
+  "value": "6f58d7b",
+  "anchor": "first commit of the gate's protocol (git log --diff-filter=A)"
+ },
+ "cpp_cut_12": {
+  "value": "73",
+  "anchor": "G13b in vla.cpp, shared/gate/data/2026-10-19_vlacpp_prefix_overwrite/vlacpp_overwrite_summary.json"
+ },
+ "cpp_cut_20": {
+  "value": "72",
+  "anchor": "G13b in vla.cpp, shared/gate/data/2026-10-19_vlacpp_prefix_overwrite/vlacpp_overwrite_summary.json"
+ },
+ "cpp_cut_8": {
+  "value": "71",
+  "anchor": "G13b in vla.cpp, shared/gate/data/2026-10-19_vlacpp_prefix_overwrite/vlacpp_overwrite_summary.json"
+ },
+ "cpp_ow_added_ms": {
+  "value": "0.4",
+  "anchor": "G13b in vla.cpp, shared/gate/data/2026-10-19_vlacpp_prefix_overwrite/vlacpp_overwrite_summary.json"
+ },
+ "ex_cut_12": {
+  "value": "31",
+  "anchor": "G13b, shared/gate/data/2026-10-19_g13b_offline/ (g13b_summary.json, g13b_preflight.json; PyTorch, 25 W, 254 boundaries per delay)"
+ },
+ "ex_cut_20": {
+  "value": "21",
+  "anchor": "G13b, shared/gate/data/2026-10-19_g13b_offline/ (g13b_summary.json, g13b_preflight.json; PyTorch, 25 W, 254 boundaries per delay)"
+ },
+ "ex_cut_8": {
+  "value": "29",
+  "anchor": "G13b, shared/gate/data/2026-10-19_g13b_offline/ (g13b_summary.json, g13b_preflight.json; PyTorch, 25 W, 254 boundaries per delay)"
+ },
+ "exact_over_naive": {
+  "value": "1.9",
+  "anchor": "G13b, shared/gate/data/2026-10-19_g13b_offline/ (g13b_summary.json, g13b_preflight.json; PyTorch, 25 W, 254 boundaries per delay)"
+ },
+ "glat_rest": {
+  "value": "67.3",
+  "anchor": "G-lat-2, shared/gate/data/2026-10-20_glat2/glat2_gpu640_summary.json (mean of 400 chunks)"
+ },
+ "glat_total": {
+  "value": "219.0",
+  "anchor": "G-lat-2, shared/gate/data/2026-10-20_glat2/glat2_gpu640_summary.json (mean of 400 chunks)"
+ },
+ "glat_vision": {
+  "value": "151.0",
+  "anchor": "G-lat-2, shared/gate/data/2026-10-20_glat2/glat2_gpu640_summary.json (mean of 400 chunks)"
+ },
+ "glat_vision_pct": {
+  "value": "69",
+  "anchor": "G-lat-2, shared/gate/data/2026-10-20_glat2/glat2_gpu640_summary.json (mean of 400 chunks)"
+ },
+ "n10_ms": {
+  "value": "237.5",
+  "anchor": "horizon x depth A2, paper-vs-hardware 2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json (MAXN_SUPER, median of 50 calls)"
+ },
+ "n2_ms": {
+  "value": "196.1",
+  "anchor": "horizon x depth A2, paper-vs-hardware 2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json (MAXN_SUPER, median of 50 calls)"
+ },
+ "n2_over_n10": {
+  "value": "0.83",
+  "anchor": "horizon x depth A2, paper-vs-hardware 2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json (MAXN_SUPER, median of 50 calls)"
+ },
+ "n2_saved_ms": {
+  "value": "41",
+  "anchor": "horizon x depth A2, paper-vs-hardware 2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json (MAXN_SUPER, median of 50 calls)"
+ },
+ "n2_saved_pct": {
+  "value": "17",
+  "anchor": "horizon x depth A2, paper-vs-hardware 2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json (MAXN_SUPER, median of 50 calls)"
+ },
+ "naive_d": {
+  "value": "8",
+  "anchor": "PACT-VLA gates A / B, .../2026-10-30-paper-vs-hardware-pact/expected/gate_a.json, gate_b.json"
+ },
+ "ow_cut_12": {
+  "value": "74",
+  "anchor": "G13b, shared/gate/data/2026-10-19_g13b_offline/ (g13b_summary.json, g13b_preflight.json; PyTorch, 25 W, 254 boundaries per delay)"
+ },
+ "ow_cut_20": {
+  "value": "72",
+  "anchor": "G13b, shared/gate/data/2026-10-19_g13b_offline/ (g13b_summary.json, g13b_preflight.json; PyTorch, 25 W, 254 boundaries per delay)"
+ },
+ "ow_cut_8": {
+  "value": "73",
+  "anchor": "G13b, shared/gate/data/2026-10-19_g13b_offline/ (g13b_summary.json, g13b_preflight.json; PyTorch, 25 W, 254 boundaries per delay)"
+ },
+ "pact_d": {
+  "value": "37",
+  "anchor": "PACT-VLA gates A / B, .../2026-10-30-paper-vs-hardware-pact/expected/gate_a.json, gate_b.json"
+ },
+ "pact_ms": {
+  "value": "1,200",
+  "anchor": "PACT-VLA gates A / B, .../2026-10-30-paper-vs-hardware-pact/expected/gate_a.json, gate_b.json"
+ },
+ "pact_sel": {
+  "value": "-0.27",
+  "anchor": "PACT-VLA gates A / B, .../2026-10-30-paper-vs-hardware-pact/expected/gate_a.json, gate_b.json"
+ },
+ "pact_sel_hi": {
+  "value": "-0.09",
+  "anchor": "PACT-VLA gates A / B, .../2026-10-30-paper-vs-hardware-pact/expected/gate_a.json, gate_b.json"
+ },
+ "pact_sel_lo": {
+  "value": "-0.44",
+  "anchor": "PACT-VLA gates A / B, .../2026-10-30-paper-vs-hardware-pact/expected/gate_a.json, gate_b.json"
+ },
+ "pact_tgen1": {
+  "value": "237.5",
+  "anchor": "PACT-VLA gates A / B, .../2026-10-30-paper-vs-hardware-pact/expected/gate_a.json, gate_b.json"
+ },
+ "prefill_ms": {
+  "value": "14.9",
+  "anchor": "horizon x depth A2, paper-vs-hardware 2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json (MAXN_SUPER, median of 50 calls)"
+ },
+ "pt_exact_ms": {
+  "value": "1962",
+  "anchor": "G13b, shared/gate/data/2026-10-19_g13b_offline/ (g13b_summary.json, g13b_preflight.json; PyTorch, 25 W, 254 boundaries per delay)"
+ },
+ "pt_naive_ms": {
+  "value": "1028",
+  "anchor": "G13b, shared/gate/data/2026-10-19_g13b_offline/ (g13b_summary.json, g13b_preflight.json; PyTorch, 25 W, 254 boundaries per delay)"
+ },
+ "r2_hi": {
+  "value": "0.81",
+  "anchor": "horizon x depth A1, .../expected/a1_cloud.json (20 frames x 32 draws)"
+ },
+ "r2_lo": {
+  "value": "0.73",
+  "anchor": "horizon x depth A1, .../expected/a1_cloud.json (20 frames x 32 draws)"
+ },
+ "r2_ratio": {
+  "value": "0.78",
+  "anchor": "horizon x depth A1, .../expected/a1_cloud.json (20 frames x 32 draws)"
+ },
+ "r2_verdict": {
+  "value": "not proven",
+  "anchor": "horizon x depth A1, .../expected/a1_cloud.json (20 frames x 32 draws)"
+ },
+ "sm_cost": {
+  "value": "+0.19",
+  "anchor": "smooth MP chunking gate A, projects/smooth-chunking/results/a_summary.json (20 episodes)"
+ },
+ "sm_err": {
+  "value": "-0.020",
+  "anchor": "smooth MP chunking gate A, projects/smooth-chunking/results/a_summary.json (20 episodes)"
+ },
+ "sm_jerk": {
+  "value": "94",
+  "anchor": "smooth MP chunking gate A, projects/smooth-chunking/results/a_summary.json (20 episodes)"
+ },
+ "sm_seam25": {
+  "value": "83",
+  "anchor": "smooth MP chunking gate A, projects/smooth-chunking/results/a_summary.json (20 episodes)"
+ },
+ "sm_seam50": {
+  "value": "87",
+  "anchor": "smooth MP chunking gate A, projects/smooth-chunking/results/a_summary.json (20 episodes)"
+ },
+ "step_ms": {
+  "value": "5.3",
+  "anchor": "horizon x depth A2, paper-vs-hardware 2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json (MAXN_SUPER, median of 50 calls)"
+ },
+ "vision_ms_a2": {
+  "value": "150.7",
+  "anchor": "horizon x depth A2, paper-vs-hardware 2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json (MAXN_SUPER, median of 50 calls)"
+ }
+}

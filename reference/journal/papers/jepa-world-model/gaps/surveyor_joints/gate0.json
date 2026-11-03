@@ -1,0 +1,45 @@
+{
+ "episodes": {
+  "success": 39,
+  "failure": 30,
+  "invalid": 0
+ },
+ "equivalent": {
+  "n": 1482,
+  "median": 0.0265,
+  "p10": 0.0132,
+  "p90": 0.0587
+ },
+ "non_equivalent_mid": {
+  "n": 2652,
+  "median": 0.6941,
+  "p10": 0.0224,
+  "p90": 1.0821
+ },
+ "non_equivalent_fail_end": {
+  "n": 1170,
+  "median": 0.8098,
+  "p10": 0.0263,
+  "p90": 1.0385
+ },
+ "non_equivalent_pooled": {
+  "n": 3822,
+  "median": 0.7429,
+  "p10": 0.0235,
+  "p90": 1.0684
+ },
+ "auroc_eq_vs_ne": 0.8655,
+ "paper_tau": 0.2,
+ "bars": {
+  "S1": {
+   "tau": 0.0265,
+   "ne_p10": 0.0235,
+   "met": false
+  },
+  "S2": {
+   "tau": 0.0265,
+   "bar": 0.4,
+   "met": true
+  }
+ }
+}
