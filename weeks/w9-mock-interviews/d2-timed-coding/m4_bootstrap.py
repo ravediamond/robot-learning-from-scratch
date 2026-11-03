@@ -1,13 +1,21 @@
-# time:
+import math
+
 import torch
 
 
-def paired_success_diff_ci(a: torch.Tensor, b: torch.Tensor, B: int, seed: int) -> tuple[float, float, float]:
-    """a, b (n,) 0/1 outcomes on the same n starts. Returns (mean(a - b), lo, hi) 95% percentile bootstrap
-    over starts with torch.Generator(seed)."""
-    raise NotImplementedError
+def paired_success_diff_ci(a, b, B, seed):
+    d = (a - b).double()
+    g = torch.Generator().manual_seed(seed)
+    n = len(d)
+    stats = torch.stack([d[torch.randint(0, n, (n,), generator=g)].mean() for _ in range(B)])
+    q = torch.quantile(stats, torch.tensor([0.025, 0.975], dtype=torch.float64))
+    return d.mean().item(), q[0].item(), q[1].item()
 
 
-def wilson(k: int, n: int) -> tuple[float, float]:
-    """z = 1.96."""
-    raise NotImplementedError
+def wilson(k, n):
+    z = 1.96
+    p = k / n
+    den = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / den
+    h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / den
+    return max(0.0, c - h), min(1.0, c + h)

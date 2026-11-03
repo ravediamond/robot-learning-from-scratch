@@ -1,14 +1,21 @@
-"""W9 D4: the three verdicts as code."""
+"""W9 D4: SOLUTION."""
 import torch
 
 
-def paired_diff_ci(base: torch.Tensor, method: torch.Tensor, B: int = 2000, seed: int = 0) -> tuple[float, float, float]:
-    """(d = mean(method - base), lo, hi): 95% percentile bootstrap over the paired starts."""
-    # TODO
-    raise NotImplementedError
+def paired_diff_ci(base, method, B=2000, seed=0):
+    d = (method - base).double()
+    g = torch.Generator().manual_seed(seed)
+    n = len(d)
+    stats = torch.stack([d[torch.randint(0, n, (n,), generator=g)].mean() for _ in range(B)])
+    q = torch.quantile(stats, torch.tensor([0.025, 0.975], dtype=torch.float64))
+    return d.mean().item(), q[0].item(), q[1].item()
 
 
-def verdict(d: float, lo: float, hi: float, pass_line: float, fail_line: float, confounds: list[str] | None = None) -> str:
-    """'pass', 'fail' or 'not proven' (README rule)."""
-    # TODO
-    raise NotImplementedError
+def verdict(d, lo, hi, pass_line, fail_line, confounds=None):
+    if confounds:
+        return "not proven"
+    if d >= pass_line and lo > 0:
+        return "pass"
+    if d <= fail_line and hi < pass_line:
+        return "fail"
+    return "not proven"

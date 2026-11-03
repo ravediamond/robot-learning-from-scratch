@@ -1,13 +1,17 @@
-# time:
 import torch
 
 
-def flow_matching_loss(v_net, x1: torch.Tensor, cond: torch.Tensor, generator: torch.Generator) -> torch.Tensor:
-    """x1 (B, H, D) clean action chunks. t=0 noise, t=1 data. v_net(x_t, t (B,), cond) -> (B, H, D)."""
-    raise NotImplementedError
+def flow_matching_loss(v_net, x1, cond, generator):
+    x0 = torch.randn(x1.shape, generator=generator)
+    t = torch.rand(x1.shape[0], generator=generator)
+    tt = t.view(-1, *([1] * (x1.dim() - 1)))
+    xt = (1 - tt) * x0 + tt * x1
+    return ((v_net(xt, t, cond) - (x1 - x0)) ** 2).mean()
 
 
 @torch.no_grad()
-def sample(v_net, cond: torch.Tensor, shape: tuple, steps: int, generator: torch.Generator) -> torch.Tensor:
-    """Euler from noise of `shape` at t=0 to t=1."""
-    raise NotImplementedError
+def sample(v_net, cond, shape, steps, generator):
+    x = torch.randn(shape, generator=generator)
+    for i in range(steps):
+        x = x + v_net(x, torch.full((shape[0],), i / steps), cond) / steps
+    return x

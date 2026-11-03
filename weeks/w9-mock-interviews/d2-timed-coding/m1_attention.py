@@ -1,13 +1,17 @@
-# time:
+import math
+
 import torch
 
 
-def causal_attention(q: torch.Tensor, k: torch.Tensor, v: torch.Tensor) -> torch.Tensor:
-    """(B, h, T, d) each -> (B, h, T, d). Scaled dot-product, causal."""
-    raise NotImplementedError
+def causal_attention(q, k, v):
+    T = q.shape[-2]
+    s = q @ k.transpose(-2, -1) / math.sqrt(q.shape[-1])
+    s = s.masked_fill(torch.triu(torch.ones(T, T, dtype=torch.bool), 1), float("-inf"))
+    return torch.softmax(s, -1) @ v
 
 
-def multi_head_self_attention(x: torch.Tensor, Wqkv: torch.Tensor, Wo: torch.Tensor, h: int) -> torch.Tensor:
-    """x (B, T, D), Wqkv (3D, D) applied as x @ Wqkv.T then split into q, k, v; Wo (D, D) applied as out @ Wo.T.
-    Causal. Returns (B, T, D)."""
-    raise NotImplementedError
+def multi_head_self_attention(x, Wqkv, Wo, h):
+    B, T, D = x.shape
+    q, k, v = (x @ Wqkv.T).split(D, -1)
+    q, k, v = (t.view(B, T, h, D // h).transpose(1, 2) for t in (q, k, v))
+    return causal_attention(q, k, v).transpose(1, 2).reshape(B, T, D) @ Wo.T

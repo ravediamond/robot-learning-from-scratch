@@ -1,4 +1,4 @@
-"""Chunked BC on sim2d demos: split, normalise, train, evaluate, save. Runs without errors. 7 bugs."""
+"""SOLUTION: the 7 fixes are marked FIX."""
 import math
 
 import torch
@@ -12,11 +12,11 @@ H = 8
 def split(demos: dict, val_frac: float = 0.2, seed: int = 0) -> tuple[dict, dict]:
     """Train/val split for the demos."""
     g = torch.Generator().manual_seed(seed)
-    N = len(demos["obs"])
-    perm = torch.randperm(N, generator=g)
-    n_val = int(val_frac * N)
-    val_idx, tr_idx = perm[:n_val], perm[n_val:]
-    return {k: v[tr_idx] for k, v in demos.items()}, {k: v[val_idx] for k, v in demos.items()}
+    eps = torch.unique(demos["episode"])                               # FIX 1: split by EPISODE, not by frame
+    perm = eps[torch.randperm(len(eps), generator=g)]
+    val_eps = perm[: max(1, int(val_frac * len(eps)))]
+    is_val = torch.isin(demos["episode"], val_eps)
+    return {k: v[~is_val] for k, v in demos.items()}, {k: v[is_val] for k, v in demos.items()}
 
 
 def norm_stats(demos: dict) -> dict:
@@ -29,21 +29,22 @@ def norm_stats(demos: dict) -> dict:
 class Policy(nn.Module):
     def __init__(self, stats: dict):
         super().__init__()
-        self.stats = stats
+        for k, v in stats.items():                                      # FIX 6: stats as buffers (saved/loaded)
+            self.register_buffer(k, v.clone())
         self.net = nn.Sequential(nn.Linear(2, 256), nn.ReLU(), nn.Dropout(0.1), nn.Linear(256, 256), nn.ReLU(),
                                  nn.Linear(256, H * 2))
 
     def forward(self, obs):
-        z = (obs - self.stats["obs_mean"]) / self.stats["obs_std"]
+        z = (obs - self.obs_mean) / self.obs_std
         return self.net(z).view(-1, H, 2)                                  # normalised actions
 
     def act(self, obs):
-        return self(obs) * self.stats["act_std"] + self.stats["act_mean"]
+        return self(obs) * self.act_std + self.act_mean
 
 
 def masked_loss(pred, target, mask):
     err = ((pred - target) ** 2).mean(-1)
-    return (err * mask).sum() / err.numel()
+    return (err * mask).sum() / mask.sum().clamp(min=1.0)                # FIX 3: divide by real steps
 
 
 def lr_at(step: int, total: int, peak: float = 1e-3, warmup: int = 100) -> float:
@@ -60,18 +61,23 @@ def train(train_d: dict, stats: dict, steps: int = 2000, batch: int = 256, seed:
     target = (train_d["chunks"] - stats["act_mean"]) / stats["act_std"]
     for step in range(steps):
         for grp in opt.param_groups:
-            grp["lr"] = lr_at(step // 100, steps)
+            grp["lr"] = lr_at(step, steps)                              # FIX 4: schedule in steps, not step // 100
         i = torch.randint(0, len(target), (batch,), generator=g)
         loss = masked_loss(pol(train_d["obs"][i]), target[i], train_d["mask"][i].float())
+        opt.zero_grad()                                                 # FIX 7: clear gradients every step
         loss.backward()
         opt.step()
-    return pol
+    return pol.eval()
 
 
 @torch.no_grad()
 def val_loss(pol: Policy, val_d: dict) -> float:
-    target = (val_d["chunks"] - pol.stats["act_mean"]) / pol.stats["act_std"]
-    return masked_loss(pol(val_d["obs"]), target, val_d["mask"].float()).item()
+    was = pol.training
+    pol.eval()                                                          # FIX 5: dropout off during validation
+    target = (val_d["chunks"] - pol.act_mean) / pol.act_std
+    out = masked_loss(pol(val_d["obs"]), target, val_d["mask"].float()).item()
+    pol.train(was)
+    return out
 
 
 def save(pol: Policy, path: str) -> None:
@@ -87,8 +93,8 @@ def load(path: str) -> Policy:
 
 def main():
     demos = sim2d.make_demos(200, H, seed=0)
-    stats = norm_stats(demos)
     tr, va = split(demos)
+    stats = norm_stats(tr)                                              # FIX 2: stats from the training split only
     pol = train(tr, stats)
     print("val loss", val_loss(pol, va))
     save(pol, "policy.pt")
