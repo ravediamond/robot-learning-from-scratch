@@ -1,4 +1,4 @@
-"""W6 D5: behaviour cloning vs DAgger under disturbances. Single-step policies (no chunks)."""
+"""W6 D5: SOLUTION."""
 import torch
 import torch.nn as nn
 
@@ -6,31 +6,51 @@ import dagger_world as w
 import sim2d
 
 
-def train_bc(obs: torch.Tensor, act: torch.Tensor, steps: int = 1500, seed: int = 0) -> nn.Module:
-    """MLP 2 -> 128 -> 128 -> 2 (ReLU) predicting act / MAX_STEP, MSE, Adam 1e-3, batch 256. Eval mode."""
-    # TODO
-    raise NotImplementedError
+def train_bc(obs, act, steps=1500, seed=0):
+    torch.manual_seed(seed)
+    net = nn.Sequential(nn.Linear(2, 128), nn.ReLU(), nn.Linear(128, 128), nn.ReLU(), nn.Linear(128, 2))
+    opt = torch.optim.Adam(net.parameters(), lr=1e-3)
+    g = torch.Generator().manual_seed(seed)
+    y = act / sim2d.MAX_STEP
+    for _ in range(steps):
+        i = torch.randint(0, len(obs), (256,), generator=g)
+        loss = ((net(obs[i]) - y[i]) ** 2).mean()
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    return net.eval()
 
 
 @torch.no_grad()
-def run(policy: nn.Module, n: int, seed: int, record: bool = False) -> dict:
-    """n episodes from sim2d.sample_starts(n, Generator(seed)); the SAME generator then draws
-    w.pushes(n, g). Each step t < T_MAX: if t == w.KICK_T add the push to the live episodes; if record,
-    store the positions of the live episodes; action = clip_action(policy(pos) * MAX_STEP); move live
-    episodes; collision, then success checks.
-    Returns {"success", "collision"} (n,) bool and, if record, "visited" (V, 2)."""
-    # TODO
-    raise NotImplementedError
+def run(policy, n, seed, record=False):
+    g = torch.Generator().manual_seed(seed)
+    pos = sim2d.sample_starts(n, g)
+    kick = w.pushes(n, g)
+    succ = torch.zeros(n, dtype=torch.bool)
+    col = torch.zeros(n, dtype=torch.bool)
+    visited = []
+    for t in range(sim2d.T_MAX):
+        live = ~(succ | col)
+        if t == w.KICK_T:
+            pos = pos + kick * live[:, None]
+        if record:
+            visited.append(pos[live].clone())
+        pos = pos + sim2d.clip_action(policy(pos) * sim2d.MAX_STEP) * live[:, None]
+        col |= sim2d.collides(pos) & live
+        succ |= sim2d.reached(pos) & live & ~col
+    out = {"success": succ, "collision": col}
+    if record:
+        out["visited"] = torch.cat(visited)
+    return out
 
 
-def aggregate(obs, act, visited) -> tuple[torch.Tensor, torch.Tensor]:
-    """Append the visited states, labelled with the EXPERT's actions."""
-    # TODO
-    raise NotImplementedError
+def aggregate(obs, act, visited):
+    return torch.cat([obs, visited]), torch.cat([act, w.expert(visited)])
 
 
-def dagger(obs, act, iterations: int, n_rollouts: int = 50, seed: int = 100) -> tuple[nn.Module, int]:
-    """Start from train_bc(obs, act). Each iteration i: run(policy, n_rollouts, seed + i, record=True),
-    aggregate, retrain with train_bc(..., seed=i + 1). Returns (final policy, dataset size)."""
-    # TODO
-    raise NotImplementedError
+def dagger(obs, act, iterations, n_rollouts=50, seed=100):
+    pol = train_bc(obs, act)
+    for i in range(iterations):
+        obs, act = aggregate(obs, act, run(pol, n_rollouts, seed + i, record=True)["visited"])
+        pol = train_bc(obs, act, seed=i + 1)
+    return pol, len(obs)

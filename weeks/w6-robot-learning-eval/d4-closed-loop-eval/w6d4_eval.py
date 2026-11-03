@@ -1,34 +1,45 @@
-"""W6 D4: closed-loop evaluation harness on sim2d."""
+"""W6 D4: SOLUTION."""
 import torch
 
 import sim2d
 
 
-def fixed_starts(n: int, seed: int) -> torch.Tensor:
-    """(n, 2) start states from sim2d.sample_starts with Generator(seed). Same seed -> same starts."""
-    # TODO
-    raise NotImplementedError
+def fixed_starts(n, seed):
+    return sim2d.sample_starts(n, torch.Generator().manual_seed(seed))
 
 
 @torch.no_grad()
-def evaluate(act_fn, starts: torch.Tensor, H_exec: int, seed: int = 0) -> dict:
-    """Roll out act_fn(obs (k, 2), generator) -> raw chunks (k, H, 2) from the GIVEN starts (do not modify
-    them). Generator(seed) for the policy's sampling. Replan every H_exec steps, clip actions, collision then
-    success checks, stop finished episodes, T_MAX steps total.
-    Returns {"success": (n,) bool, "collision": (n,) bool, "steps": (n,) long}."""
-    # TODO
-    raise NotImplementedError
+def evaluate(act_fn, starts, H_exec, seed=0):
+    g = torch.Generator().manual_seed(seed)
+    pos = starts.clone()
+    n = len(pos)
+    success = torch.zeros(n, dtype=torch.bool)
+    collision = torch.zeros(n, dtype=torch.bool)
+    steps = torch.zeros(n, dtype=torch.long)
+    t = 0
+    while t < sim2d.T_MAX and not (success | collision).all():
+        idx = (~(success | collision)).nonzero().squeeze(1)
+        chunk = act_fn(pos[idx], g)
+        for k in range(min(H_exec, chunk.shape[1])):
+            live = ~(success[idx] | collision[idx])
+            pos[idx] = pos[idx] + sim2d.clip_action(chunk[:, k]) * live[:, None]
+            steps[idx] += live.long()
+            collision[idx] |= sim2d.collides(pos[idx]) & live
+            success[idx] |= sim2d.reached(pos[idx]) & live & ~collision[idx]
+            t += 1
+            if t >= sim2d.T_MAX:
+                break
+    return {"success": success, "collision": collision, "steps": steps}
 
 
-def paired_counts(success_a: torch.Tensor, success_b: torch.Tensor) -> dict:
-    """{"n11": both, "n10": A only, "n01": B only, "n00": neither} as ints."""
-    # TODO
-    raise NotImplementedError
+def paired_counts(a, b):
+    a, b = a.bool(), b.bool()
+    return {"n11": int((a & b).sum()), "n10": int((a & ~b).sum()), "n01": int((~a & b).sum()), "n00": int((~a & ~b).sum())}
 
 
 @torch.no_grad()
-def val_chunk_mse(act_fn, demos: dict, seed: int = 0) -> float:
-    """Mean squared error (raw units, masked over real steps) between ONE sample of act_fn(demos['obs'])
-    and demos['chunks']."""
-    # TODO
-    raise NotImplementedError
+def val_chunk_mse(act_fn, demos, seed=0):
+    pred = act_fn(demos["obs"], torch.Generator().manual_seed(seed))
+    err = ((pred - demos["chunks"]) ** 2).mean(-1)
+    m = demos["mask"].float()
+    return ((err * m).sum() / m.sum()).item()

@@ -1,39 +1,46 @@
-"""W6 D2: statistics for robot evaluation. torch + the standard library only."""
+"""W6 D2: SOLUTION."""
 import math
 from statistics import NormalDist
-from typing import Callable
 
 import torch
 
 
-def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
-    """95% Wilson interval, clipped to [0, 1]. n = 0 -> (0.0, 1.0)."""
-    # TODO
-    raise NotImplementedError
+def wilson(k, n, z=1.96):
+    if n == 0:
+        return (0.0, 1.0)
+    p = k / n
+    d = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / d
+    h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+    return (max(0.0, c - h), min(1.0, c + h))
 
 
-def bootstrap_ci(values: torch.Tensor, stat: Callable[[torch.Tensor], torch.Tensor], B: int = 2000, seed: int = 0,
-                 alpha: float = 0.05) -> tuple[float, float]:
-    """values (n, ...): one row per EPISODE. Resample rows with replacement B times (torch.Generator(seed)),
-    compute stat on each resample, return the (alpha/2, 1-alpha/2) percentiles (torch.quantile)."""
-    # TODO
-    raise NotImplementedError
+def bootstrap_ci(values, stat, B=2000, seed=0, alpha=0.05):
+    g = torch.Generator().manual_seed(seed)
+    n = len(values)
+    stats = torch.stack([torch.as_tensor(stat(values[torch.randint(0, n, (n,), generator=g)]), dtype=torch.float64)
+                         for _ in range(B)])
+    q = torch.quantile(stats, torch.tensor([alpha / 2, 1 - alpha / 2], dtype=torch.float64))
+    return q[0].item(), q[1].item()
 
 
-def paired_bootstrap_diff(a: torch.Tensor, b: torch.Tensor, B: int = 2000, seed: int = 0) -> tuple[float, float, float]:
-    """a, b (n,) outcomes of two policies on the SAME n start states. Returns (mean(a - b), lo, hi) with the
-    95% percentile bootstrap over start states."""
-    # TODO
-    raise NotImplementedError
+def paired_bootstrap_diff(a, b, B=2000, seed=0):
+    d = (a - b).double()
+    lo, hi = bootstrap_ci(d, lambda x: x.mean(), B, seed)
+    return d.mean().item(), lo, hi
 
 
-def mcnemar_exact(n01: int, n10: int) -> float:
-    """Two-sided exact McNemar p-value from the discordant counts."""
-    # TODO
-    raise NotImplementedError
+def mcnemar_exact(n01, n10):
+    n = n01 + n10
+    if n == 0:
+        return 1.0
+    k = min(n01, n10)
+    tail = sum(math.comb(n, i) for i in range(k + 1)) / 2 ** n
+    return min(1.0, 2 * tail)
 
 
-def trials_needed(p1: float, p2: float, alpha: float = 0.05, power: float = 0.8) -> int:
-    """Trials PER ARM (rounded up) to distinguish p1 from p2, two independent groups, two-sided test."""
-    # TODO
-    raise NotImplementedError
+def trials_needed(p1, p2, alpha=0.05, power=0.8):
+    za, zb = NormalDist().inv_cdf(1 - alpha / 2), NormalDist().inv_cdf(power)
+    pb = (p1 + p2) / 2
+    num = (za * math.sqrt(2 * pb * (1 - pb)) + zb * math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2
+    return math.ceil(num / (p1 - p2) ** 2)

@@ -1,12 +1,12 @@
-"""REVIEW. "DAgger" implementation for an arm policy. Three iterations, the dataset tripled, and
-the success rate under disturbances did not move at all. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: the visited states are labelled with the POLICY's own actions, so the "new data" only repeats what
+the policy already does (self-training); nothing teaches recovery. Label them with the expert.
 """
 import torch
 
 
 def dagger_step(policy, expert, obs, act, visited):
-    """Aggregate the states visited by `policy` into the dataset (obs, act)."""
     with torch.no_grad():
-        labels = policy(visited)
+        labels = expert(visited)
     return torch.cat([obs, visited]), torch.cat([act, labels])

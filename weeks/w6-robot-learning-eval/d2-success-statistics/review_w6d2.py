@@ -1,14 +1,15 @@
-"""REVIEW. Confidence interval for a policy's success rate from the logged rollouts table
-(one row per FRAME, with the episode's outcome repeated on each row). The interval is
-impressively tight: "93% ± 0.6% with only 40 episodes". Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: it resamples FRAMES, treating ~10,000 correlated frames as independent trials. The unit is the episode:
+resample episodes (one outcome each). The interval was ~sqrt(frames per episode) times too narrow.
 """
 import torch
 
 
-def success_ci(frame_success: torch.Tensor, episode_id: torch.Tensor, B: int = 2000, seed: int = 0):
-    """frame_success (F,) 0/1, episode_id (F,) -> (lo, hi) 95% CI of the per-episode success rate."""
+def success_ci(frame_success, episode_id, B=2000, seed=0):
+    eps = torch.unique(episode_id)
+    outcome = torch.stack([frame_success[episode_id == e][0].float() for e in eps])     # one per episode
     g = torch.Generator().manual_seed(seed)
-    F = len(frame_success)
-    stats = torch.stack([frame_success[torch.randint(0, F, (F,), generator=g)].float().mean() for _ in range(B)])
+    n = len(outcome)
+    stats = torch.stack([outcome[torch.randint(0, n, (n,), generator=g)].mean() for _ in range(B)])
     return torch.quantile(stats, 0.025).item(), torch.quantile(stats, 0.975).item()

@@ -1,6 +1,8 @@
-"""REVIEW. Compares two policies. The report says B beats A by 6 points; rerun it and A beats B.
-Both policies are deterministic. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: the starts come from an unseeded torch.Generator() (non-deterministic seed), not from `seed`: every
+call evaluates on different start states, so two policies are never compared on the same starts and
+the ranking flips with sampling noise. Seed the starts (and share them across policies).
 """
 import torch
 
@@ -8,9 +10,9 @@ import sim2d
 
 
 @torch.no_grad()
-def success_rate(act_fn, n: int = 100, seed: int = 0) -> float:
+def success_rate(act_fn, n=100, seed=0):
     g = torch.Generator().manual_seed(seed)
-    pos = sim2d.sample_starts(n, torch.Generator().manual_seed(torch.seed()))   # fresh starts each call
+    pos = sim2d.sample_starts(n, torch.Generator().manual_seed(seed))
     done = torch.zeros(n, dtype=torch.bool)
     ok = torch.zeros(n, dtype=torch.bool)
     for _ in range(sim2d.T_MAX):
