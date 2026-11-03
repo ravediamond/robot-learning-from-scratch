@@ -1,0 +1,8 @@
+# Model answers
+
+1. Each step is x_t = √α_t x_{t−1} + √β_t ε_t. Sums of independent Gaussians are Gaussian: unrolling gives x_t = √(Π α_s) x_0 + noise with variance 1 − Π α_s (the variances telescope because α + β = 1). So abar_t = Π_{s≤t} α_s.
+2. ε has unit variance at every t, a well-scaled regression target; x_0 prediction at large t is nearly impossible (the input is almost pure noise) and the errors are large and unevenly weighted. The ε-parameterization (with this loss) corresponds to the simplified variational bound that works best empirically. (v-prediction is another well-scaled choice.)
+3. The model still learns to predict the noise given the (wrongly built) x_t, so the regression loss decreases. But the sampler's update rule assumes the correct forward process, so it removes the "noise" in the wrong proportions: generated chunks never converge to data.
+4. DDIM uses a deterministic (non-Markovian) update with the same trained network, so it can skip steps: 10–16 evaluations instead of 100. Diffusion Policy trains with 100 steps and samples with DDIM ~10 to fit a ~10 Hz control loop.
+5. Input: noisy chunk (H × D_action) and the step k; conditioning: observation features (image encoder + state, a few past frames) via FiLM in a 1-D temporal U-Net (CNN variant) or cross-attention (transformer variant). Output: the noise for the whole chunk. Receding horizon: execute 8 of 16 predicted steps.
+6. Fewer steps (DDIM/flow matching ~5–10), consistency or shortcut distillation to 1–2 steps, async inference with chunks so inference runs in parallel with execution (RTC), smaller denoiser, cache the observation encoder output across steps, run the policy at 10 Hz and interpolate to 50 Hz in a low-level controller.

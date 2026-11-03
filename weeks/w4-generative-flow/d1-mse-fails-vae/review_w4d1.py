@@ -1,12 +1,11 @@
-"""REVIEW. The reparameterization of a policy CVAE. Samples are far too spread out, and the
-KL term never settles. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: std = exp(logvar) is the VARIANCE, not the std. std = exp(0.5 * logvar). With logvar > 0 the
+samples are too wide (std squared), with logvar < 0 too narrow, inconsistent with the KL term.
 """
 import torch
 
 
-def sample_latent(mu: torch.Tensor, logvar: torch.Tensor, generator=None) -> torch.Tensor:
-    """z ~ N(mu, exp(logvar)) with the reparameterization trick."""
+def sample_latent(mu, logvar, generator=None):
     eps = torch.randn(mu.shape, generator=generator)
-    std = torch.exp(logvar)
-    return mu + std * eps
+    return mu + torch.exp(0.5 * logvar) * eps

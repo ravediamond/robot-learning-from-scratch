@@ -1,0 +1,8 @@
+# Model answers
+
+1. E[(y − c)²] = E[(y − m)²] + (m − c)² with m = E[y], because the cross term 2(m − c)E[y − m] = 0. Minimized at c = m. Conditioned on the observation, the optimum is E[y | obs].
+2. The randomness is moved into an input eps that does not depend on the parameters; z is a deterministic, differentiable function of (mu, logvar, eps), so gradients flow to mu and logvar. Without it: score-function (REINFORCE) estimators, much higher variance.
+3. β → 0: a plain autoencoder; q(z|x) can be anything, the prior N(0, I) is not matched, so sampling z ~ N(0, I) gives garbage (holes). β large: posterior collapses to the prior, z carries nothing, output = mean (MSE again). For a policy: small β (ACT uses ~10 with its own scaling), enough to make the prior usable.
+4. z = 0 picks the "center" style: one deterministic behavior instead of sampling modes; you lose diversity, but get a single coherent chunk (no averaging across modes, because the decoder learned to produce a full trajectory for each z). Chunking + z = 0 is why ACT is smooth and works with few demos.
+5. logvar = −4: true std should be e^(−2) = 0.135, code uses e^(−4) = 0.018 (too narrow). logvar = 4: should be e² = 7.4, code uses e⁴ = 54.6. The KL formula assumes variance = exp(logvar) while samples use std = exp(logvar): the gradient pushes logvar in a direction the sampling doesn't match, so the optimizer keeps fighting.
+6. A K-component GMM head is cheap, exact likelihood, handles a few discrete modes (left/right) well. Cons: K fixed in advance, mode collapse in training, poor for high-dimensional chunks (50×6 with correlations), unstable. Enough for low-dim single-step actions with a handful of modes (robomimic BC-RNN-GMM worked well); diffusion/flow win for long chunks.
