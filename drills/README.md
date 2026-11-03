@@ -13,6 +13,9 @@ not need 300 problems. You need ~15 **patterns**, recognized fast and coded clea
 Interviewers score: talking while coding, edge cases stated before running (empty input,
 one element, duplicates, negatives), complexity stated without being asked.
 
+## Weeks (folder = week)
+w1 hash map, stack, monotonic deque, intervals, binary search · w2 two pointers, sliding window · w3 heaps / top-k · w4 BFS/DFS on grids · w5 union-find, topological sort, Dijkstra, cycles · w6 DP basics · w7 DP + interval scheduling · w8 design (LRU, trie, ring buffer, in-place matrix).
+
 ## Week 1 patterns
 | Drill | Pattern | Robotics flavor |
 |---|---|---|
