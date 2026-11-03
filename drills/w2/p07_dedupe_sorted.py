@@ -1,4 +1,9 @@
-def dedupe_sorted(a: list[int]) -> int:
-    """Remove duplicates IN PLACE from a sorted list (like timestamps from a logger that repeats readings).
-    Return k: the first k entries of a are the unique values in order. O(n), O(1) extra memory."""
-    raise NotImplementedError
+def dedupe_sorted(a):
+    if not a:
+        return 0
+    k = 1
+    for x in a[1:]:
+        if x != a[k - 1]:
+            a[k] = x
+            k += 1
+    return k

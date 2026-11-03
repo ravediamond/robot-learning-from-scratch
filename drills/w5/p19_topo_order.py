@@ -1,4 +1,19 @@
-def topo_order(n: int, deps: list[tuple[int, int]]) -> list[int] | None:
-    """Tasks 0..n-1; (a, b) means a must run before b (e.g. calibrate before record before train).
-    Return an order (Kahn's algorithm, smallest available task first) or None if there is a cycle."""
-    raise NotImplementedError
+import heapq
+
+
+def topo_order(n, deps):
+    adj, indeg = [[] for _ in range(n)], [0] * n
+    for a, b in deps:
+        adj[a].append(b)
+        indeg[b] += 1
+    ready = [i for i in range(n) if indeg[i] == 0]
+    heapq.heapify(ready)
+    out = []
+    while ready:
+        u = heapq.heappop(ready)
+        out.append(u)
+        for v in adj[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0:
+                heapq.heappush(ready, v)
+    return out if len(out) == n else None

@@ -1,3 +1,7 @@
-def rotate_90(m: list[list[int]]) -> None:
-    """Rotate a square image 90 degrees clockwise IN PLACE (transpose, then reverse each row). O(1) extra."""
-    raise NotImplementedError
+def rotate_90(m):
+    n = len(m)
+    for i in range(n):
+        for j in range(i + 1, n):
+            m[i][j], m[j][i] = m[j][i], m[i][j]
+    for row in m:
+        row.reverse()

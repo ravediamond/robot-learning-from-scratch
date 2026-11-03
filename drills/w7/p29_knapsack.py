@@ -1,3 +1,6 @@
-def knapsack(weights: list[int], values: list[int], capacity: int) -> int:
-    """0/1 knapsack: pick experiments (GPU hours, value) under a budget; max total value. O(n * capacity)."""
-    raise NotImplementedError
+def knapsack(weights, values, capacity):
+    dp = [0] * (capacity + 1)
+    for w, v in zip(weights, values):
+        for c in range(capacity, w - 1, -1):
+            dp[c] = max(dp[c], dp[c - w] + v)
+    return dp[capacity]

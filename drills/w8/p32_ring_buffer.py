@@ -1,15 +1,20 @@
 class RingBuffer:
-    """Fixed-size telemetry buffer (e.g. last N joint torques). push(x) O(1); mean() O(1) over the stored
-    values; values() -> list oldest first."""
+    def __init__(self, size):
+        self.buf, self.size, self.i, self.n, self.total = [0.0] * size, size, 0, 0, 0.0
 
-    def __init__(self, size: int):
-        raise NotImplementedError
+    def push(self, x):
+        if self.n == self.size:
+            self.total -= self.buf[self.i]
+        else:
+            self.n += 1
+        self.buf[self.i] = x
+        self.total += x
+        self.i = (self.i + 1) % self.size
 
-    def push(self, x: float) -> None:
-        raise NotImplementedError
+    def mean(self):
+        return self.total / self.n if self.n else 0.0
 
-    def mean(self) -> float:
-        raise NotImplementedError
-
-    def values(self) -> list[float]:
-        raise NotImplementedError
+    def values(self):
+        if self.n < self.size:
+            return self.buf[: self.n]
+        return self.buf[self.i:] + self.buf[: self.i]
