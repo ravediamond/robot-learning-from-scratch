@@ -1,14 +1,14 @@
-"""REVIEW. Inference loop of a flow-matching action expert. Trained fine (low loss), but the
-actions it produces at inference are wild. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: the time passed to the network is the step index (0..9) instead of t = i / steps in [0, 1): the
+network is queried at times it never saw in training. Use t = i / steps.
 """
 import torch
 
 
 @torch.no_grad()
-def sample_chunk(expert, prefix, B: int, H: int, steps: int = 10, generator=None) -> torch.Tensor:
+def sample_chunk(expert, prefix, B, H, steps=10, generator=None):
     x = torch.randn(B, H, 2, generator=generator)
     for i in range(steps):
-        t = torch.full((B,), float(i))
-        x = x + expert(prefix, x, t) / steps
+        x = x + expert(prefix, x, torch.full((B,), i / steps)) / steps
     return x

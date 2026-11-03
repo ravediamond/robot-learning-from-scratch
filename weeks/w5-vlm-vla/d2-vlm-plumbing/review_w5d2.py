@@ -1,12 +1,13 @@
-"""REVIEW. Token merging for a VLM (4 neighbouring patch tokens -> 1). Shapes are right; the
-VLA's localisation got much worse after adding it, more than expected from the lower resolution.
-Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: a plain reshape merges r*r CONSECUTIVE tokens in row-major order (e.g. 4 tokens of the same row,
+possibly wrapping to the next row), not an r x r spatial block. Reshape to the grid, permute, reshape.
 """
 import torch
 
 
-def merge_tokens(x: torch.Tensor, r: int = 2) -> torch.Tensor:
-    """(B, h*h, C) -> (B, (h/r)^2, C*r*r), merging r x r spatial neighbours."""
+def merge_tokens(x, r=2):
     B, N, C = x.shape
-    return x.reshape(B, N // (r * r), C * r * r)
+    h = int(round(N ** 0.5))
+    g = x.view(B, h // r, r, h // r, r, C).permute(0, 1, 3, 2, 4, 5)
+    return g.reshape(B, N // (r * r), C * r * r)

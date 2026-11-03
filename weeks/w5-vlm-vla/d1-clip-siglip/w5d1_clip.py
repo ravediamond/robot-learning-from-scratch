@@ -1,4 +1,4 @@
-"""W5 D1: CLIP / SigLIP losses and a tiny CLIP."""
+"""W5 D1: SOLUTION."""
 import math
 
 import torch
@@ -6,46 +6,54 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-def clip_loss(img_emb: torch.Tensor, txt_emb: torch.Tensor, logit_scale: torch.Tensor) -> torch.Tensor:
-    """img_emb, txt_emb (N, d) NOT yet normalized; logit_scale = log of the scale (scalar).
-    L2-normalize, logits = exp(logit_scale) * z @ u.T, symmetric cross-entropy (mean of both directions)."""
-    # TODO
-    raise NotImplementedError
+def clip_loss(img_emb, txt_emb, logit_scale):
+    z, u = F.normalize(img_emb, dim=-1), F.normalize(txt_emb, dim=-1)
+    logits = logit_scale.exp() * z @ u.T                                  # (N, N)
+    labels = torch.arange(len(z), device=z.device)
+    return (F.cross_entropy(logits, labels) + F.cross_entropy(logits.T, labels)) / 2
 
 
-def siglip_loss(img_emb: torch.Tensor, txt_emb: torch.Tensor, log_t: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
-    """Normalize, logits = exp(log_t) * z @ u.T + b, labels +1 diagonal / -1 elsewhere,
-    loss = -mean(logsigmoid(labels * logits)) over all N*N pairs."""
-    # TODO
-    raise NotImplementedError
+def siglip_loss(img_emb, txt_emb, log_t, b):
+    z, u = F.normalize(img_emb, dim=-1), F.normalize(txt_emb, dim=-1)
+    logits = log_t.exp() * z @ u.T + b
+    labels = 2 * torch.eye(len(z), device=z.device) - 1
+    return -F.logsigmoid(labels * logits).mean()
 
 
 class TinyCLIP(nn.Module):
-    """Image tower: Conv(3,32,3,p1) ReLU MaxPool2 Conv(32,64,3,p1) ReLU AdaptiveAvgPool(2) Flatten Linear(256, d).
-    Text tower: nn.Embedding(9, d) summed over the 3 tokens, then Linear(d, d).
-    logit_scale parameter initialised to log(10)."""
-
-    def __init__(self, d: int = 32):
+    def __init__(self, d=32):
         super().__init__()
-        # TODO
+        self.img = nn.Sequential(nn.Conv2d(3, 32, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
+                                 nn.Conv2d(32, 64, 3, padding=1), nn.ReLU(), nn.AdaptiveAvgPool2d(2),
+                                 nn.Flatten(), nn.Linear(256, d))
+        self.tok = nn.Embedding(9, d)
+        self.txt = nn.Linear(d, d)
+        self.logit_scale = nn.Parameter(torch.tensor(math.log(10.0)))
 
     def encode_image(self, img):
-        # TODO
-        raise NotImplementedError
+        return self.img(img)
 
     def encode_text(self, tokens):
-        # TODO
-        raise NotImplementedError
+        return self.txt(self.tok(tokens).sum(1))
 
 
-def train_clip(imgs, caps, steps: int = 1500, batch: int = 64, lr: float = 3e-3, seed: int = 0) -> TinyCLIP:
-    # TODO
-    raise NotImplementedError
+def train_clip(imgs, caps, steps=1500, batch=64, lr=3e-3, seed=0):
+    torch.manual_seed(seed)
+    model = TinyCLIP()
+    opt = torch.optim.Adam(model.parameters(), lr=lr)
+    g = torch.Generator().manual_seed(seed)
+    for _ in range(steps):
+        i = torch.randint(0, len(imgs), (batch,), generator=g)
+        loss = clip_loss(model.encode_image(imgs[i]), model.encode_text(caps[i]), model.logit_scale)
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    return model.eval()
 
 
 @torch.no_grad()
-def zero_shot_accuracy(model: TinyCLIP, imgs: torch.Tensor, caps: torch.Tensor, all_caps: torch.Tensor) -> float:
-    """For each image, pick the caption among all_caps (K, 3) with the highest cosine similarity.
-    Accuracy = fraction where it equals the true caption."""
-    # TODO
-    raise NotImplementedError
+def zero_shot_accuracy(model, imgs, caps, all_caps):
+    z = F.normalize(model.encode_image(imgs), dim=-1)
+    u = F.normalize(model.encode_text(all_caps), dim=-1)
+    pred = all_caps[(z @ u.T).argmax(1)]                                  # (N, 3)
+    return (pred == caps).all(1).float().mean().item()

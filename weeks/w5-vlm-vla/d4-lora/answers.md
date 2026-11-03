@@ -1,0 +1,8 @@
+# Model answers
+
+1. h = x Aᵀ (N, r), y_lora = s · h Bᵀ. dL/dB = s · Gᵀ h where G = dL/dy: h = 0 when A = 0 → dB = 0. dL/dA = s · (G B)ᵀ x: G B = 0 when B = 0 → dA = 0. Both stay 0: a saddle point Adam cannot leave.
+2. The pretrained model already has the features; adapting to a new embodiment/task mostly re-weights or re-routes a few directions (empirically, fine-tuning updates have low intrinsic rank). Also a regularizer: the small capacity of the update limits forgetting and overfitting on few demos.
+3. LoRA on the attention projections (q, k, v, o) and maybe MLPs of the language model; vision tower frozen; the action expert, the state projection and the action in/out projections trained fully (they are small and task-specific; the expert is new anyway).
+4. Catastrophic forgetting (language following erodes when only robot data with few instructions is seen). Mitigations: freeze or LoRA the LM instead of full fine-tune; co-train with the original VLM data (π0.5 style); lower lr on the backbone; diverse instructions; check with counterfactual-instruction evals.
+5. The loss is flat and the params do not move, as with a tiny lr; but raising the lr changes nothing, and grads are exactly zero (not small): check `p.grad.abs().max()` on A and B.
+6. Freeze the vision tower; LoRA (r 16–32) on the LM; train the action expert and state/action projections fully; normalization stats from the new data. Plan: overfit 1 batch, then 3 runs (frozen VLM, LoRA, full) on the same 200 demos, evaluate on 20 fixed start layouts + 10 counterfactual instructions, success with Wilson CIs and paired comparisons, pre-registered bar (e.g. LoRA ≥ frozen + 10 points and instruction following not worse than frozen). Choose the cheapest that passes.
