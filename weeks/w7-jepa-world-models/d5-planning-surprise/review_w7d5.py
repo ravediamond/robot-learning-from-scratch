@@ -1,12 +1,11 @@
-"""REVIEW. One CEM iteration. The planner never improves over random shooting, whatever the number
-of iterations. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: the elites are selected and then ignored: mu and std are refitted on ALL samples, so the distribution
+never moves toward low cost (it just stays where it was: random shooting). Refit on the elites.
 """
 import torch
 
 
-def cem_iteration(samples: torch.Tensor, cost: torch.Tensor, K: int) -> tuple[torch.Tensor, torch.Tensor]:
-    """samples (N, H, A) action sequences, cost (N,). Returns the new (mu, std), each (H, A)."""
-    elite_idx = torch.topk(cost, K, largest=False).indices
-    elites = samples[elite_idx]
-    return samples.mean(0), samples.std(0) + 1e-3
+def cem_iteration(samples, cost, K):
+    elites = samples[torch.topk(cost, K, largest=False).indices]
+    return elites.mean(0), elites.std(0) + 1e-3

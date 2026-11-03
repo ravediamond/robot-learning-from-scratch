@@ -1,4 +1,4 @@
-"""W7 D4: a mini LeWM. No EMA, no stop-gradient: SIGReg prevents collapse."""
+"""W7 D4: SOLUTION."""
 import torch
 import torch.nn as nn
 
@@ -8,46 +8,59 @@ from probes_ref import apply_probe, copy_last_error, mlp_probe, r2, ridge_probe
 
 
 class Encoder(nn.Module):
-    """See README. (B, 1, 32, 32) -> (B, D)."""
-
-    def __init__(self, D: int = 8):
+    def __init__(self, D=8):
         super().__init__()
-        # TODO
+        self.net = nn.Sequential(nn.Conv2d(1, 16, 4, 2, 1), nn.ReLU(), nn.Conv2d(16, 32, 4, 2, 1), nn.ReLU(),
+                                 nn.Conv2d(32, 32, 4, 2, 1), nn.ReLU(), nn.Flatten(),
+                                 nn.Linear(512, 128), nn.ReLU(), nn.Linear(128, D))
 
     def forward(self, x):
-        # TODO
-        raise NotImplementedError
+        return self.net(x)
 
 
 class Predictor(nn.Module):
-    """z_next = z + MLP(concat(z, a / W.AMAX)), MLP (D+2) -> 128 -> 128 -> D, ReLU."""
-
-    def __init__(self, D: int = 8):
+    def __init__(self, D=8):
         super().__init__()
-        # TODO
+        self.net = nn.Sequential(nn.Linear(D + 2, 128), nn.ReLU(), nn.Linear(128, 128), nn.ReLU(), nn.Linear(128, D))
 
     def forward(self, z, a):
-        # TODO
-        raise NotImplementedError
+        return z + self.net(torch.cat([z, a / W.AMAX], -1))
 
 
-def lewm_loss(enc, pred, o0, a, o1, lam: float, generator=None) -> tuple[torch.Tensor, torch.Tensor]:
-    """Returns (total loss, prediction MSE). SIGReg (64 directions, `generator`) on cat(z0, z1) when lam > 0."""
-    # TODO
-    raise NotImplementedError
+def lewm_loss(enc, pred, o0, a, o1, lam, generator=None):
+    z0, z1 = enc(o0), enc(o1)
+    l_pred = ((pred(z0, a) - z1) ** 2).mean()
+    total = l_pred + lam * sigreg(torch.cat([z0, z1]), 64, generator) if lam > 0 else l_pred
+    return total, l_pred
 
 
-def train_lewm(data: dict, lam: float, steps: int = 1500, batch: int = 128, lr: float = 1e-3, seed: int = 0):
-    """data from W.make_episodes. Each step: random (episode, t) pairs -> (o_t, a_t, o_{t+1}). Adam on both
-    modules. Returns (encoder, predictor) in eval mode."""
-    # TODO
-    raise NotImplementedError
+def train_lewm(data, lam, steps=1500, batch=128, lr=1e-3, seed=0):
+    torch.manual_seed(seed)
+    enc, pred = Encoder(), Predictor()
+    opt = torch.optim.Adam(list(enc.parameters()) + list(pred.parameters()), lr=lr)
+    g = torch.Generator().manual_seed(seed)
+    O, A = data["obs"], data["action"]
+    E, T = A.shape[:2]
+    for _ in range(steps):
+        e = torch.randint(0, E, (batch,), generator=g)
+        t = torch.randint(0, T, (batch,), generator=g)
+        loss, _ = lewm_loss(enc, pred, O[e, t], A[e, t], O[e, t + 1], lam, g)
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    return enc.eval(), pred.eval()
 
 
 @torch.no_grad()
-def latent_report(enc, pred, train: dict, val: dict) -> dict:
-    """On VAL episodes: z_std (mean over dims), pred_err (mean ||pred(z_t, a_t) - z_{t+1}||^2), copy_err
-    (copy_last_error), ratio = pred_err / copy_err. Probes fitted on TRAIN episodes, R² on VAL for the
-    position: lin_r2 (ridge) and mlp_r2 (mlp_probe)."""
-    # TODO
-    raise NotImplementedError
+def latent_report(enc, pred, train, val):
+    E, T1 = val["obs"].shape[:2]
+    Z = enc(val["obs"].flatten(0, 1)).view(E, T1, -1)
+    pe = ((pred(Z[:, :-1].flatten(0, 1), val["action"].flatten(0, 1)) - Z[:, 1:].flatten(0, 1)) ** 2).sum(-1).mean().item()
+    ce = copy_last_error(Z)
+    Ztr = enc(train["obs"].flatten(0, 1))
+    Ytr, Yva, Zva = train["pos"].flatten(0, 1), val["pos"].flatten(0, 1), Z.flatten(0, 1)
+    W_, b = ridge_probe(Ztr, Ytr)
+    with torch.enable_grad():
+        probe = mlp_probe(Ztr, Ytr)
+    return {"z_std": Z.std(dim=(0, 1)).mean().item(), "pred_err": pe, "copy_err": ce, "ratio": pe / max(ce, 1e-12),
+            "lin_r2": r2(apply_probe(Zva, W_, b), Yva), "mlp_r2": r2(probe(Zva), Yva)}

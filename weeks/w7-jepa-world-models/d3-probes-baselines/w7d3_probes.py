@@ -1,33 +1,36 @@
-"""W7 D3: probes and baselines for latents."""
+"""W7 D3: SOLUTION."""
 import torch
 import torch.nn as nn
 
 
-def ridge_probe(Z: torch.Tensor, Y: torch.Tensor, lam: float = 1e-3) -> tuple[torch.Tensor, torch.Tensor]:
-    """Closed-form ridge with a bias: returns W (d, k), b (k,) minimising ||Z W + b - Y||^2 + lam ||[W; b]||^2."""
-    # TODO
-    raise NotImplementedError
+def ridge_probe(Z, Y, lam=1e-3):
+    X = torch.cat([Z, torch.ones(len(Z), 1, dtype=Z.dtype)], 1)              # (N, d+1)
+    A = X.T @ X + lam * torch.eye(X.shape[1], dtype=Z.dtype)
+    Wb = torch.linalg.solve(A, X.T @ Y)                                      # (d+1, k)
+    return Wb[:-1], Wb[-1]
 
 
-def apply_probe(Z, W, b) -> torch.Tensor:
-    # TODO
-    raise NotImplementedError
+def apply_probe(Z, W, b):
+    return Z @ W + b
 
 
-def r2(pred: torch.Tensor, Y: torch.Tensor) -> float:
-    """1 - SS_res / SS_tot, sums over samples and dims, mean of Y over the evaluated set."""
-    # TODO
-    raise NotImplementedError
+def r2(pred, Y):
+    return (1 - ((Y - pred) ** 2).sum() / ((Y - Y.mean(0)) ** 2).sum()).item()
 
 
-def mlp_probe(Z: torch.Tensor, Y: torch.Tensor, steps: int = 800, seed: int = 0) -> nn.Module:
-    """MLP d -> 64 -> k (ReLU), full-batch Adam 3e-3, MSE. Returns the trained module (eval mode).
-    Must also work when called inside torch.no_grad(): train under torch.enable_grad(), on Z.detach()."""
-    # TODO
-    raise NotImplementedError
+def mlp_probe(Z, Y, steps=800, seed=0):
+    torch.manual_seed(seed)
+    Z, Y = Z.detach(), Y.detach()
+    net = nn.Sequential(nn.Linear(Z.shape[1], 64), nn.ReLU(), nn.Linear(64, Y.shape[1]))
+    opt = torch.optim.Adam(net.parameters(), lr=3e-3)
+    with torch.enable_grad():
+        for _ in range(steps):
+            loss = ((net(Z) - Y) ** 2).mean()
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+    return net.eval()
 
 
-def copy_last_error(Z: torch.Tensor) -> float:
-    """Z (E, T+1, d) latent trajectories. Mean over (E, T) of ||z_{t+1} - z_t||^2."""
-    # TODO
-    raise NotImplementedError
+def copy_last_error(Z):
+    return ((Z[:, 1:] - Z[:, :-1]) ** 2).sum(-1).mean().item()

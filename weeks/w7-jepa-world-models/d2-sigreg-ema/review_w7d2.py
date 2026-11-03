@@ -1,12 +1,12 @@
-"""REVIEW. EMA update of the target encoder in an I-JEPA-style training loop, m = 0.996.
-The target is supposed to move slowly; in practice it is a near copy of the online encoder
-after every step, and training collapses. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: the weights are swapped: m * online + (1 - m) * target puts 99.6% of the ONLINE weights into the
+target every step, so the target is a copy of the online network (no slow target, collapse returns).
 """
 import torch
 
 
 @torch.no_grad()
-def ema(target, online, m: float = 0.996):
+def ema(target, online, m=0.996):
     for pt, po in zip(target.parameters(), online.parameters()):
-        pt.copy_(m * po + (1 - m) * pt)
+        pt.copy_(m * pt + (1 - m) * po)

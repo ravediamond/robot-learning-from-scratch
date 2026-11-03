@@ -1,4 +1,4 @@
-"""W7 D5: CEM planning in latent space, and surprise."""
+"""W7 D5: SOLUTION."""
 import sys
 from pathlib import Path
 
@@ -11,40 +11,49 @@ from w7d4_lewm import Encoder, Predictor  # noqa: E402,F401
 
 
 @torch.no_grad()
-def cem_plan(pred, z0: torch.Tensor, cost_fn, H: int = 5, N: int = 200, K: int = 20, iters: int = 4,
-             generator: torch.Generator | None = None) -> torch.Tensor:
-    """z0 (E, D). cost_fn(z (E, N, D)) -> (E, N) cost of one predicted latent. Returns the first action (E, 2)
-    of the final mean. Cost of a sequence = sum over the H predicted latents."""
-    # TODO
-    raise NotImplementedError
+def cem_plan(pred, z0, cost_fn, H=5, N=200, K=20, iters=4, generator=None):
+    E, D = z0.shape
+    mu, std = torch.zeros(E, H, 2), torch.full((E, H, 2), W.AMAX)
+    for _ in range(iters):
+        a = (mu[:, None] + std[:, None] * torch.randn(E, N, H, 2, generator=generator)).clamp(-W.AMAX, W.AMAX)
+        z = z0[:, None].expand(E, N, D).reshape(E * N, D)
+        cost = torch.zeros(E, N)
+        for h in range(H):
+            z = pred(z, a[:, :, h].reshape(E * N, 2))
+            cost = cost + cost_fn(z.view(E, N, D))
+        idx = cost.topk(K, largest=False).indices                              # (E, K)
+        el = torch.gather(a, 1, idx[:, :, None, None].expand(E, K, H, 2))
+        mu, std = el.mean(1), el.std(1) + 1e-3
+    return mu[:, 0]
 
 
-def latent_cost(z_goal: torch.Tensor):
-    """z_goal (E, D) -> cost_fn(z (E, N, D)) = squared L2 distance to the goal latent."""
-    # TODO
-    raise NotImplementedError
+def latent_cost(z_goal):
+    return lambda z: ((z - z_goal[:, None]) ** 2).sum(-1)
 
 
-def probe_cost(probe, goal_pos: torch.Tensor):
-    """probe: module D -> 2 (decoded position); goal_pos (E, 2) -> cost_fn = squared distance of probe(z) to goal."""
-    # TODO
-    raise NotImplementedError
-
-
-@torch.no_grad()
-def run_planner(enc, pred, start: torch.Tensor, goal: torch.Tensor, make_cost, steps: int = 25, seed: int = 0,
-                act_fn=None) -> torch.Tensor:
-    """Closed loop in pixel_world. z_goal = enc(render(goal)); cost = make_cost(z_goal, goal).
-    Each step: z = enc(render(pos)); a = cem_plan(pred, z, cost, generator=g) (or act_fn(z, g) if given);
-    pos = W.step(pos, a). Returns the final positions (E, 2). g = Generator(seed)."""
-    # TODO
-    raise NotImplementedError
+def probe_cost(probe, goal_pos):
+    return lambda z: ((probe(z) - goal_pos[:, None]) ** 2).sum(-1)
 
 
 @torch.no_grad()
-def surprise_scores(enc, pred, n_episodes: int = 50, jump: float = 0.6, seed: int = 3):
-    """Episodes from W.make_episodes(n_episodes, 20, seed). At transition t = 10 (between frames 10 and 11) the
-    point teleports: positions from frame 11 on are (pos + jump).clamp(-W.LIM, W.LIM); re-render them.
-    Returns (scores (E*20,) = ||pred(z_t, a_t) - z_{t+1}||^2, labels (E*20,) bool True on the teleport transition)."""
-    # TODO
-    raise NotImplementedError
+def run_planner(enc, pred, start, goal, make_cost, steps=25, seed=0, act_fn=None):
+    g = torch.Generator().manual_seed(seed)
+    cost = make_cost(enc(W.render(goal)), goal) if make_cost is not None else None
+    pos = start.clone()
+    for _ in range(steps):
+        z = enc(W.render(pos))
+        a = act_fn(z, g) if act_fn is not None else cem_plan(pred, z, cost, generator=g)
+        pos = W.step(pos, a)
+    return pos
+
+
+@torch.no_grad()
+def surprise_scores(enc, pred, n_episodes=50, jump=0.6, seed=3):
+    d = W.make_episodes(n_episodes, 20, seed)
+    P = d["pos"].clone()
+    P[:, 11:] = (P[:, 11:] + jump).clamp(-W.LIM, W.LIM)
+    Z = enc(W.render(P.reshape(-1, 2))).view(n_episodes, 21, -1)
+    s = ((pred(Z[:, :-1].flatten(0, 1), d["action"].flatten(0, 1)) - Z[:, 1:].flatten(0, 1)) ** 2).sum(-1)
+    lab = torch.zeros(n_episodes, 20, dtype=torch.bool)
+    lab[:, 10] = True
+    return s, lab.flatten()

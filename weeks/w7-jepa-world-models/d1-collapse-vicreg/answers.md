@@ -1,0 +1,8 @@
+# Model answers
+
+1. MSE between views is ≥ 0 and equals 0 whenever f(x1) = f(x2): a constant f achieves it for every pair. Gradient descent shrinks the output scale (e.g. last-layer weights toward 0), a direction that reduces the loss for every sample at once: fast and stable.
+2. Invariance: views of the same thing agree. Variance: no dimension collapses to a constant across the batch. Covariance: dimensions carry different information (no redundancy). Without covariance: all 8 dims can be copies of one or two useful directions (dimensional collapse): std looks healthy, effective rank low.
+3. Each dimension can have std 1 while all dimensions are perfectly correlated (rank 1): per-dimension std misses it; effective rank catches it. Conversely, effective rank alone doesn't tell you the scale (it is scale invariant).
+4. The variance of the d entries of each sample: it measures how "spread" one embedding vector is, which says nothing about whether different samples differ. A constant embedding with varied entries satisfies it: collapse unpenalised.
+5. Variance and covariance are estimated from the batch: with small N, estimates are noisy and the d×d covariance has rank ≤ N−1 (meaningless for d > N). SIGReg also uses batch statistics, but only 1-D projections: a 1-D distribution test needs far fewer samples than a d×d covariance, and it has one weight to tune instead of three.
+6. Depends on the information content: if the scene has ~3 controllable degrees of freedom (arm pose dims that matter + object), a low effective rank may be fine; if probes for known variables (gripper state, object position) fail, it's partial collapse. Check probes, the spectrum, and planning/evaluation quality before calling it a problem.

@@ -1,30 +1,31 @@
-"""W7 D2: SIGReg, EMA, stop-gradient."""
+"""W7 D2: SOLUTION."""
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 
-def epps_pulley(p: torch.Tensor, T: float = 3.0, K: int = 17) -> torch.Tensor:
-    """p (N, M): M one-dimensional samples of size N. Returns (M,) Epps-Pulley statistics vs N(0, 1)
-    (formula in the README, multiplied by N, trapezoid rule over K points in [-T, T])."""
-    # TODO
-    raise NotImplementedError
+def epps_pulley(p, T=3.0, K=17):
+    t = torch.linspace(-T, T, K, device=p.device, dtype=p.dtype)
+    arg = p[:, :, None] * t                                         # (N, M, K)
+    re, im = torch.cos(arg).mean(0), torch.sin(arg).mean(0)          # (M, K)
+    phi = torch.exp(-t ** 2 / 2)
+    integrand = ((re - phi) ** 2 + im ** 2) * phi
+    return p.shape[0] * torch.trapezoid(integrand, t, dim=-1)       # (M,)
 
 
-def sigreg(z: torch.Tensor, n_dirs: int = 64, generator: torch.Generator | None = None) -> torch.Tensor:
-    """z (N, d). Random unit directions U (d, n_dirs) from `generator`, project, mean Epps-Pulley."""
-    # TODO
-    raise NotImplementedError
+def sigreg(z, n_dirs=64, generator=None):
+    U = torch.randn(z.shape[1], n_dirs, generator=generator).to(z)
+    U = U / U.norm(dim=0, keepdim=True)
+    return epps_pulley(z @ U).mean()
 
 
 @torch.no_grad()
-def ema_update(target: nn.Module, online: nn.Module, m: float) -> None:
-    """In place: every target param <- m * target + (1 - m) * online."""
-    # TODO
-    raise NotImplementedError
+def ema_update(target, online, m):
+    for pt, po in zip(target.parameters(), online.parameters()):
+        pt.mul_(m).add_(po, alpha=1 - m)
 
 
-def jepa_ema_loss(online: nn.Module, target: nn.Module, predictor: nn.Module, x_ctx: torch.Tensor,
-                  x_tgt: torch.Tensor) -> torch.Tensor:
-    """MSE between predictor(online(x_ctx)) and target(x_tgt), with NO gradient into the target encoder."""
-    # TODO
-    raise NotImplementedError
+def jepa_ema_loss(online, target, predictor, x_ctx, x_tgt):
+    with torch.no_grad():
+        tgt = target(x_tgt)
+    return F.mse_loss(predictor(online(x_ctx)), tgt)

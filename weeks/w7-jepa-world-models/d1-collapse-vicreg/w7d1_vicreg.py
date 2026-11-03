@@ -1,24 +1,50 @@
-"""W7 D1: collapse and VICReg."""
+"""W7 D1: SOLUTION."""
+import math
+
 import torch
 import torch.nn as nn
 
 
-def vicreg_loss(z1: torch.Tensor, z2: torch.Tensor, sim_w: float = 25.0, var_w: float = 25.0, cov_w: float = 1.0,
-                use_cov: bool = True, eps: float = 1e-4) -> torch.Tensor:
-    """z1, z2 (N, d). See README. use_cov=False drops the covariance term."""
-    # TODO
-    raise NotImplementedError
+def _var(z, eps):
+    return torch.relu(1 - torch.sqrt(z.var(dim=0) + eps)).mean()
 
 
-def effective_rank(z: torch.Tensor) -> float:
-    """exp(entropy) of the normalised singular values of the CENTRED z (N, d)."""
-    # TODO
-    raise NotImplementedError
+def _cov(z):
+    N, d = z.shape
+    zc = z - z.mean(0)
+    C = zc.T @ zc / (N - 1)
+    off = C - torch.diag(torch.diag(C))
+    return (off ** 2).sum() / d
 
 
-def train_siamese(data: torch.Tensor, kind: str, steps: int = 500, batch: int = 256, seed: int = 0):
-    """Encoder MLP 2 -> 64 -> 64 -> 8 (ReLU). Each step: x = random batch; two views x + 0.05*noise.
-    kind: "invariance" (MSE between views only), "vicreg", or "no_cov" (vicreg with use_cov=False).
-    Adam 1e-3. Returns (encoder in eval mode, last loss as float)."""
-    # TODO
-    raise NotImplementedError
+def vicreg_loss(z1, z2, sim_w=25.0, var_w=25.0, cov_w=1.0, use_cov=True, eps=1e-4):
+    loss = sim_w * ((z1 - z2) ** 2).mean() + var_w * (_var(z1, eps) + _var(z2, eps))
+    if use_cov:
+        loss = loss + cov_w * (_cov(z1) + _cov(z2))
+    return loss
+
+
+def effective_rank(z):
+    s = torch.linalg.svdvals(z - z.mean(0))
+    p = s / s.sum()
+    p = p[p > 0]
+    return math.exp(-(p * p.log()).sum().item())
+
+
+def train_siamese(data, kind, steps=500, batch=256, seed=0):
+    torch.manual_seed(seed)
+    enc = nn.Sequential(nn.Linear(2, 64), nn.ReLU(), nn.Linear(64, 64), nn.ReLU(), nn.Linear(64, 8))
+    opt = torch.optim.Adam(enc.parameters(), lr=1e-3)
+    g = torch.Generator().manual_seed(seed)
+    for _ in range(steps):
+        x = data[torch.randint(0, len(data), (batch,), generator=g)]
+        z1 = enc(x + 0.05 * torch.randn(x.shape, generator=g))
+        z2 = enc(x + 0.05 * torch.randn(x.shape, generator=g))
+        if kind == "invariance":
+            loss = ((z1 - z2) ** 2).mean()
+        else:
+            loss = vicreg_loss(z1, z2, use_cov=(kind == "vicreg"))
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    return enc.eval(), loss.item()

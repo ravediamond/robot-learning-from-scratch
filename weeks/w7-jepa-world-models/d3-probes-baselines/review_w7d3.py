@@ -1,11 +1,13 @@
-"""REVIEW. R² for latent probes. Every probe, even on a random untrained encoder, scores above 0.9.
-Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: the denominator uses the variance of the PREDICTIONS instead of the TARGETS. A probe that predicts
+almost constant values has a tiny denominator... and wildly wrong R² (here: huge positive or negative);
+the reference is always the variance of Y around its mean.
 """
 import torch
 
 
-def r_squared(pred: torch.Tensor, Y: torch.Tensor) -> float:
+def r_squared(pred, Y):
     ss_res = ((Y - pred) ** 2).sum()
-    ss_tot = ((pred - pred.mean(0)) ** 2).sum()
+    ss_tot = ((Y - Y.mean(0)) ** 2).sum()
     return (1 - ss_res / ss_tot).item()
