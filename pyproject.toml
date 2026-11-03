@@ -8,7 +8,13 @@ dependencies = [
     "numpy>=1.26",
     "pytest>=8.0",
     "matplotlib>=3.8",
+    "pandas>=2.0",
+    "pyarrow>=14",
+    "transformers>=4.40",   # week 3: check your GPT-2 against Hugging Face
 ]
+
+[project.optional-dependencies]
+video = ["av>=12"]          # week 2: decode your SO-101 videos (uv sync --extra video)
 
 [tool.pytest.ini_options]
 addopts = "-q"

@@ -14,7 +14,7 @@ depth layer (per-paper chapters, your own gate results).
 | `05-jepa-ssl.md` | self-supervised latents, collapse | 7 | 12, 12a, 12c |
 | `06-world-models-planning.md` | prediction, planning, evaluation | 7 | 12b, 12d, 13 |
 | `07-robot-eval-statistics.md` | how to know anything is true | 6 | 1–9 |
-| `08-question-bank.md` | mixed mock: system design, your work, pushback | 8 | 16, exercises/interview |
+| `08-question-bank.md` | mixed mock: system design, your work, pushback | 9 | 16, exercises/interview |
 
 ## How to study a primer (30–45 min, on 2h days or weekends)
 

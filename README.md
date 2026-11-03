@@ -1,6 +1,6 @@
 # Robot Learning From Scratch
 
-8 weeks. 1 hour a day, Monday to Friday. Goal: write PyTorch yourself, understand
+9 weeks. 1 hour a day, Monday to Friday. Goal: write PyTorch yourself, understand
 every piece of a VLA + world-model stack, spot when generated code is wrong, and
 pass the coding and research rounds of a top robotics startup.
 
