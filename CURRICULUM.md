@@ -7,6 +7,10 @@ retro in PROGRESS.md: labs get adjusted (easier/harder) from it.
 From week 2 on, some `predict_run.py` scripts use YOUR code: run them after your tests pass.
 K = knowledge primer to read that week (2h days or weekend).
 
+**Weekly reading slot (20 min, read only):** one real file per week, listed in `reading/README.md`
+(LeRobot normaliser, dataset windows, SmolVLA expert and flow head, the train script; your eval code,
+your LeWM, your RTC controller, your harness). Maps: `knowledge/09` (LeRobot), `knowledge/10` (Orin harness).
+
 ## Week 1: PyTorch from zero
 | Day | Lab | Build | Review bug |
 |---|---|---|---|

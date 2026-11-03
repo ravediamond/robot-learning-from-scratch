@@ -15,6 +15,8 @@ depth layer (per-paper chapters, your own gate results).
 | `06-world-models-planning.md` | prediction, planning, evaluation | 7 | 12b, 12d, 13 |
 | `07-robot-eval-statistics.md` | how to know anything is true | 6 | 1–9 |
 | `08-question-bank.md` | mixed mock: system design, your work, pushback | 9 | 16, exercises/interview |
+| `09-lerobot-reading-map.md` | LeRobot 0.6.2 plumbing: configs, processors, queue, checkpoints, inference | any (reading slot) | 14b |
+| `10-orin-harness-audit-map.md` | where to look to check a result Claude Code produced | any (reading slot) | `docs/HARNESS.md` in road-to-robotics |
 
 ## How to study a primer (30–45 min, on 2h days or weekends)
 
