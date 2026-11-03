@@ -1,0 +1,8 @@
+# Model answers
+
+1. q·k = Σᵢ qᵢkᵢ, d independent terms each with mean 0 and variance E[qᵢ²]E[kᵢ²] = 1; variances add → d. Std √d: for d = 256, logits of std 16 → softmax ≈ one-hot → gradient of softmax ≈ 0 for all but one entry → learning stalls. Dividing by √d restores unit variance.
+2. −inf: exact zero weight, but a fully masked row gives NaN and must be handled. −1e9: no NaN, but in fp16 it overflows (max 65504) → −inf anyway, or if you use −1e4 to fit fp16, a large positive score could still leak weight. Use the dtype's min (torch.finfo(dtype).min) or −inf with explicit handling.
+3. Token 0: its only allowed key (itself) is masked → all −inf → NaN, and NaN spreads through the next layers to every position and into the loss. Even without NaN, every token loses access to itself: it must represent itself only through previous tokens, which damages the model.
+4. Positional information: added (learned/sinusoidal) or applied in attention (RoPE, relative biases). For images, patch positions get 2D positional embeddings; without them a VLA would see a bag of patches and could not tell left from right.
+5. Scores per head T² = 16.8M entries × 2 bytes = 33.5 MB; × 16 heads × 8 batch ≈ 4.3 GB per layer just for the attention matrix (more for softmax grads in training). FlashAttention computes attention in tiles in SRAM with an online softmax, never materializing the T×T matrix: memory O(T) instead of O(T²), and faster because it is memory-bandwidth bound.
+6. Mask polarity (True = attend vs True = mask: PyTorch's sdpa bool mask is True = attend, nn.MultiheadAttention's key_padding_mask is True = IGNORE) and broadcasting the padding mask on the query dim instead of the key dim ((B, T, 1) instead of (B, 1, T)).

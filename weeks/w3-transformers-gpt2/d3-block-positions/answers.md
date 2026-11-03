@@ -1,0 +1,8 @@
+# Model answers
+
+1. With x_{l+1} = x_l + f(x_l), ∂x_{l+1}/∂x_l = I + ∂f/∂x_l: the identity term gives every layer a direct gradient path to the loss, so gradients do not vanish multiplicatively through depth; each block learns a small correction.
+2. Fixed chunk of 50: learned absolute embeddings are simple and fine (SmolVLA/π0 style action experts often use sinusoidal time/position features too). Variable image token counts and lengths beyond training: RoPE (relative, extrapolates better) or 2D positional embeddings interpolated to the new grid for ViT patches.
+3. Each block outputs only attn(LN(x)): the input is mixed into a weighted average of value projections and then normalized again; after 24 blocks the output carries almost no information about the input tokens (rank collapse toward a constant). Gradients are tiny but finite: flat loss, no NaN.
+4. (224/16)² = 196 per image × 2 cams × 2 frames = 784 tokens (+ text, state). Fit: lower resolution or bigger patches, pixel shuffle / token merging to 64 per image (SmolVLA), one frame instead of two, cache the prefix, run the VLM less often than the action expert.
+5. GELU is smooth (non-zero gradient for small negative inputs), which slightly improves optimization in transformers; empirically a bit better than ReLU. Not critical: SwiGLU variants are today's standard in LLMs; for small models the difference is small.
+6. Images (2 cams × 64 tokens after pixel shuffle) + instruction tokens (~10–40) + 1 state token → VLM layers up to ~N/2 → features (K/V). Action expert: 50 noisy action tokens + flow time τ; interleaved cross-attention (to VLM features) and causal self-attention layers; outputs velocity for 50×6 actions; ~10 Euler steps; async execution.

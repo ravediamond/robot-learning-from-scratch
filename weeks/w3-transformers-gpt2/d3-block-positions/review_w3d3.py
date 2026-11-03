@@ -1,6 +1,7 @@
-"""REVIEW. A 24-block policy transformer will not train: loss stays flat from step 0, deeper
-is worse than shallower. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: the attention sublayer replaces x instead of adding to it (missing residual). Every block discards
+its input; with 24 blocks the input signal and gradients must pass through 24 attention layers.
 """
 import torch.nn as nn
 
@@ -15,6 +16,5 @@ class Block(nn.Module):
         self.mlp = nn.Sequential(nn.Linear(D, 4 * D), nn.GELU(), nn.Linear(4 * D, D))
 
     def forward(self, x, mask=None):
-        x = self.attn(self.ln_1(x), mask=mask)
-        x = x + self.mlp(self.ln_2(x))
-        return x
+        x = x + self.attn(self.ln_1(x), mask=mask)
+        return x + self.mlp(self.ln_2(x))

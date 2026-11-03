@@ -1,6 +1,7 @@
-"""REVIEW. A hand-written MHA. Shapes are right, it trains, but it is clearly worse than
-nn.MultiheadAttention on the same task. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: reshape(B, h, T, Dh) splits the memory as if heads came before time: each "head" gets a block of
+consecutive time steps' features. Must split the feature dim: view(B, T, h, Dh).transpose(1, 2).
 """
 import math
 
@@ -16,8 +17,7 @@ class MHA(nn.Module):
 
     def forward(self, x):
         B, T, D = x.shape
-        split = lambda t: t.reshape(B, self.h, T, D // self.h)
+        split = lambda t: t.view(B, T, self.h, D // self.h).transpose(1, 2)
         q, k, v = split(self.q_proj(x)), split(self.k_proj(x)), split(self.v_proj(x))
         A = torch.softmax(q @ k.transpose(-2, -1) / math.sqrt(D // self.h), -1)
-        out = (A @ v).transpose(1, 2).reshape(B, T, D)
-        return self.out_proj(out)
+        return self.out_proj((A @ v).transpose(1, 2).reshape(B, T, D))
