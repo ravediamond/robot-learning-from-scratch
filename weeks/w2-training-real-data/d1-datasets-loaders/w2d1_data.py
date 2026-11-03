@@ -1,49 +1,45 @@
-"""W2 D1: datasets and loaders for episodic robot data."""
+"""W2 D1: SOLUTION."""
 import torch
 from torch.utils.data import DataLoader, Dataset
 
-Episode = dict[str, torch.Tensor]   # {"obs": (T, Do), "action": (T, Da)}
+Episode = dict[str, torch.Tensor]
 
 
 class EpisodeWindowDataset(Dataset):
-    """One sample per frame of every episode.
-
-    sample = {
-        "obs":         (Do,)     obs at time t
-        "actions":     (H, Da)   action[t : t+H]; past the episode end, repeat the LAST action
-        "action_mask": (H,) bool True on real steps, False on padded ones
-        "episode":     int       episode index (in the input list)
-    }
-    No Python list of all (episode, t) pairs: map the global index with cumulative lengths.
-    """
-
     def __init__(self, episodes: list[Episode], H: int):
-        # TODO
-        raise NotImplementedError
+        self.episodes, self.H = episodes, H
+        lengths = torch.tensor([len(e["obs"]) for e in episodes])
+        self.ends = torch.cumsum(lengths, 0)                 # (E,) exclusive end of each episode
+        self.starts = self.ends - lengths
 
     def __len__(self) -> int:
-        # TODO
-        raise NotImplementedError
+        return int(self.ends[-1])
 
     def __getitem__(self, i: int) -> dict:
-        # TODO
-        raise NotImplementedError
+        e = int(torch.searchsorted(self.ends, torch.tensor(i), right=True))
+        t = i - int(self.starts[e])
+        ep = self.episodes[e]
+        T = len(ep["obs"])
+        steps = torch.arange(t, t + self.H)                  # (H,)
+        mask = steps < T
+        actions = ep["action"][steps.clamp(max=T - 1)]       # (H, Da), repeats the last action
+        return {"obs": ep["obs"][t], "actions": actions, "action_mask": mask, "episode": e}
 
 
 def collate_windows(samples: list[dict]) -> dict:
-    """Stack each tensor field on a new dim 0; ints become a long tensor (B,). No default_collate."""
-    # TODO
-    raise NotImplementedError
+    out = {}
+    for k in samples[0]:
+        vals = [s[k] for s in samples]
+        out[k] = torch.stack(vals) if torch.is_tensor(vals[0]) else torch.tensor(vals, dtype=torch.long)
+    return out
 
 
 def make_loader(ds: Dataset, batch_size: int, seed: int, shuffle: bool = True) -> DataLoader:
-    """DataLoader with collate_windows and a reproducible shuffle (same seed -> same order)."""
-    # TODO
-    raise NotImplementedError
+    return DataLoader(ds, batch_size=batch_size, shuffle=shuffle, collate_fn=collate_windows,
+                      generator=torch.Generator().manual_seed(seed))
 
 
 def task_balanced_weights(task_ids: torch.Tensor) -> torch.Tensor:
-    """task_ids: (N,) long. Per-sample weights (N,) so every task has the same total weight,
-    and the weights sum to 1."""
-    # TODO
-    raise NotImplementedError
+    counts = torch.bincount(task_ids)                         # (K,)
+    n_tasks = (counts > 0).sum()
+    return 1.0 / (counts[task_ids].float() * n_tasks)

@@ -1,48 +1,72 @@
-"""W2 D5: pixel + state chunk policy. You may use cnn_ref (or copy your own D3 encoder)."""
+"""W2 D5: SOLUTION."""
 import torch
 import torch.nn as nn
 
 from cnn_ref import CNNEncoder, random_shift
 
-Data = dict[str, torch.Tensor]   # img (N,3,S,S) [0,1], state (N,Ds), actions (N,H,Da), mask (N,H) bool
 
-
-def masked_chunk_mse(pred: torch.Tensor, target: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
-    """pred, target (N, H, D), mask (N, H). Mean over real (step, dim) entries only."""
-    # TODO
-    raise NotImplementedError
+def masked_chunk_mse(pred, target, mask):
+    err = ((pred - target) ** 2).mean(-1)                    # (N, H)
+    m = mask.to(err.dtype)
+    return (err * m).sum() / m.sum().clamp(min=1.0)
 
 
 class PixelStatePolicy(nn.Module):
-    """Raw state + image in, raw action chunk out (N, H, Da).
-
-    Buffers: state_mean, state_std, act_mean, act_std (shapes (Ds,), (Ds,), (Da,), (Da,)).
-    use_image=False: ignore the image entirely (no CNN), state-only twin with the same head.
-    forward_normalized(img, state) returns the chunk in normalized action space.
-    """
-
-    def __init__(self, stats: dict[str, torch.Tensor], H: int, use_image: bool = True, hidden: int = 256):
+    def __init__(self, stats, H, use_image=True, hidden=256):
         super().__init__()
-        # TODO
+        for k, v in stats.items():
+            self.register_buffer(k, v.clone().float())
+        Ds, Da = stats["state_mean"].shape[0], stats["act_mean"].shape[0]
+        self.H, self.Da, self.use_image = H, Da, use_image
+        self.cnn = CNNEncoder(64) if use_image else None
+        self.state_fc = nn.Linear(Ds, 64)
+        self.head = nn.Sequential(nn.Linear(128 if use_image else 64, hidden), nn.ReLU(),
+                                  nn.Linear(hidden, hidden), nn.ReLU(), nn.Linear(hidden, H * Da))
 
-    def forward_normalized(self, img: torch.Tensor, state: torch.Tensor) -> torch.Tensor:
-        # TODO
-        raise NotImplementedError
+    def forward_normalized(self, img, state):
+        s = self.state_fc((state - self.state_mean) / self.state_std)          # (N, 64)
+        feat = torch.cat([self.cnn(img), s], -1) if self.use_image else s
+        return self.head(torch.relu(feat)).view(-1, self.H, self.Da)
 
-    def forward(self, img: torch.Tensor, state: torch.Tensor) -> torch.Tensor:
-        # TODO
-        raise NotImplementedError
-
-
-def train_policy(data: Data, use_image: bool, epochs: int = 20, batch_size: int = 64, lr: float = 1e-3,
-                 aug_pad: int = 2, seed: int = 0) -> PixelStatePolicy:
-    """Stats from `data` (state over N; actions over N and H, real steps only), Adam, masked MSE in
-    normalized action space, random_shift(img, aug_pad) on training batches only. Return in eval mode."""
-    # TODO
-    raise NotImplementedError
+    def forward(self, img, state):
+        return self.forward_normalized(img, state) * self.act_std + self.act_mean
 
 
-def evaluate(policy: PixelStatePolicy, data: Data) -> float:
-    """Masked chunk MSE in RAW units, no grad, batched (chunks of 512)."""
-    # TODO
-    raise NotImplementedError
+def _stats(data):
+    acts = data["actions"][data["mask"]]                                        # (real steps, Da)
+    return {"state_mean": data["state"].mean(0), "state_std": data["state"].std(0).clamp(min=1e-3),
+            "act_mean": acts.mean(0), "act_std": acts.std(0).clamp(min=1e-3)}
+
+
+def train_policy(data, use_image, epochs=20, batch_size=64, lr=1e-3, aug_pad=2, seed=0):
+    torch.manual_seed(seed)
+    pol = PixelStatePolicy(_stats(data), H=data["actions"].shape[1], use_image=use_image)
+    opt = torch.optim.Adam(pol.parameters(), lr=lr)
+    g = torch.Generator().manual_seed(seed)
+    N = len(data["state"])
+    target = (data["actions"] - pol.act_mean) / pol.act_std
+    pol.train()
+    for _ in range(epochs):
+        perm = torch.randperm(N, generator=g)
+        for i in range(0, N, batch_size):
+            idx = perm[i:i + batch_size]
+            img = random_shift(data["img"][idx], aug_pad, g) if use_image else data["img"][idx]
+            loss = masked_chunk_mse(pol.forward_normalized(img, data["state"][idx]), target[idx], data["mask"][idx])
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+    pol.eval()
+    return pol
+
+
+def evaluate(policy, data):
+    tot, n = 0.0, 0.0
+    with torch.no_grad():
+        for i in range(0, len(data["state"]), 512):
+            sl = slice(i, i + 512)
+            pred = policy(data["img"][sl], data["state"][sl])
+            err = ((pred - data["actions"][sl]) ** 2).mean(-1)
+            m = data["mask"][sl].float()
+            tot += (err * m).sum().item()
+            n += m.sum().item()
+    return tot / n
