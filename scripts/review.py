@@ -68,11 +68,19 @@ def questions_of(lab: Path) -> dict:
 
 
 def git_show(path: str):
-    try:
-        out = subprocess.run(["git", "-C", str(ROOT), "show", f"solutions:{path}"], capture_output=True, text=True)
-    except FileNotFoundError:
-        return None
-    return out.stdout if out.returncode == 0 else None
+    """Read a file from the solutions branch: local `solutions` first, then `origin/solutions`."""
+    for ref in ("solutions", "origin/solutions"):
+        try:
+            out = subprocess.run(["git", "-C", str(ROOT), "show", f"{ref}:{path}"], capture_output=True, text=True)
+        except FileNotFoundError:
+            return None
+        if out.returncode == 0:
+            return out.stdout
+    return None
+
+
+NO_ANSWER = ("(no model answer found. Fetch the solutions branch once: "
+             "git fetch origin solutions:solutions)")
 
 
 def answers_of(lab_rel: str) -> dict:
@@ -141,7 +149,7 @@ def cmd_run(state: dict, now: dt.date, max_cards: int, seed=None) -> None:
         if lab not in cache:
             cache[lab] = answers_of(lab)
         ans = cache[lab].get(n)
-        print("  MODEL: " + (ans if ans else "(no model answer found: fetch the solutions branch, or check the lab README)"))
+        print("  MODEL: " + (ans if ans else NO_ANSWER))
         while True:
             g = input("  grade 2 clean / 1 partial / 0 missed: ").strip()
             if g in ("0", "1", "2"):

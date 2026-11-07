@@ -1,4 +1,16 @@
 """Run AFTER writing your guesses AND after your tests pass."""
+import sys as _sys
+
+
+def _unfinished_lab_hint(exc_type, exc, tb):
+    if exc_type is NotImplementedError:
+        print("\nThis predict script runs YOUR lab code, which is not finished yet (a TODO still raises NotImplementedError)."
+              "\nMake `uv run pytest . -k \"not review\"` green in this folder first, then run me again.", file=_sys.stderr)
+    else:
+        _sys.__excepthook__(exc_type, exc, tb)
+
+
+_sys.excepthook = _unfinished_lab_hint
 import json
 from pathlib import Path
 from statistics import NormalDist
