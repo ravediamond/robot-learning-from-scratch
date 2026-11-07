@@ -3,6 +3,21 @@
 Mark each column honestly: ✅ done alone · 🟡 needed a hint · ❌ looked at the solution.
 "Redo" = rebuilt from a blank file, no notes.
 
+## Weekly checks (AI off, see LEARNING.md rule 3)
+| Week | Mon delayed recall (function, pass/fail, minutes) | Fri AI-off gate (drill, solved?, minutes) | Review cards clean % (`review.py stats`) | AI used to generate/debug exercises (honest count) |
+|---|---|---|---|---|
+| 1 |  |  |  |  |
+| 2 |  |  |  |  |
+| 3 |  |  |  |  |
+| 4 |  |  |  |  |
+| 5 |  |  |  |  |
+| 6 |  |  |  |  |
+| 7 |  |  |  |  |
+| 8 |  |  |  |  |
+| 9 |  |  |  |  |
+
+Each Friday retro, also answer: hardest lab (= next Monday's delayed-recall target)? Lab marks vs AI-off gate in the same direction?
+
 ## Week 1
 | Day | Predict misses | Build | Review | Questions out loud | Redo | Notes |
 |---|---|---|---|---|---|---|

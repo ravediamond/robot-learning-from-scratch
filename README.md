@@ -15,15 +15,20 @@ uv run pytest weeks/w1-pytorch-basics/d1-tensors-shapes   # should FAIL: you hav
 
 ## A day (1 hour)
 
+The protocol follows the 2025–2026 evidence on learning with AI around (`LEARNING.md`, read it first):
+attempt before help, AI as a complement never a substitute, spaced retrieval, AI-off checks.
+
 | Min | Step | File | What you do |
 |---|---|---|---|
-| 0–10 | Read | `README.md` | One page. The concept, nothing more. |
-| 10–15 | Predict | `predict.md` → `predict_run.py` | Write your guesses in `predict.md` FIRST. Then run `uv run python predict_run.py` and compare. Every miss = something you did not understand. Write one line on why. |
-| 15–45 | Build | `wXdY_*.py` | Fill the `TODO`s. Run `uv run pytest <lab dir> -k "not review"` until green. |
-| 45–55 | Review | `review_*.py` | Code that looks right and is wrong. Find the bug, fix it, write a one-line explanation at the top of the file. `uv run pytest <lab dir> -k review` turns green when fixed. |
-| 55–60 | Explain | `questions.md` | Answer out loud, as in an interview. 1–2 minutes each. Record yourself once a week. |
+| 0–5 | Retrieve | `scripts/review.py` | Spaced retrieval: answer due cards out loud before seeing the model answer. Mondays: 10-min delayed recall instead (`LEARNING.md` rule 3). |
+| 5–10 | Cold attempt | `predict.md` | Write your guesses BEFORE reading the README. Wrong guesses help (pretesting effect). |
+| 10–18 | Read | `README.md` | One page. The concept, nothing more. |
+| 18–20 | Check | `predict_run.py` | `uv run python predict_run.py` and compare. Every miss = something you did not understand. Write one line on why. |
+| 20–45 | Build | `wXdY_*.py` | Fill the `TODO`s. Run `uv run pytest <lab dir> -k "not review"` until green. AI off; debug alone 10 min before any hint. |
+| 45–53 | Review | `review_*.py` | Code that looks right and is wrong. Find the bug, fix it, write a one-line explanation at the top of the file. `uv run pytest <lab dir> -k review` turns green when fixed. |
+| 53–60 | Explain | `questions.md` | Answer out loud, as in an interview, then `python scripts/review.py add <lab dir>`. Record yourself once a week. |
 
-Plus **15 min LeetCode drill** (`drills/`), on any day you can.
+Plus **15 min LeetCode drill** (`drills/`), on any day you can. **Friday AI-off gate:** one drill, timer, AI fully off, logged in `PROGRESS.md`.
 
 Plus, **once a week, 20 min reading slot** (`reading/`): one real file (LeRobot, your harness), read only,
 10-line note. That is the skill you need to check Claude Code's work on the Orin.
@@ -41,10 +46,15 @@ Then read the knowledge primer for the week (`knowledge/`).
 4. **Solutions are on the `solutions` branch.** Look only after the tests are green,
    or after 20 minutes truly stuck. `git diff master solutions -- <file>` shows one file.
 5. **Tick `PROGRESS.md`** at the end of each session. Honest marks only.
+6. **AI is a complement, never a substitute.** Ask it why, never for the code. If you used it to
+   generate or debug an exercise, mark ❌ and rebuild from blank within 48 hours.
+7. **Green tests today are not learning.** The Monday delayed recall and the Friday AI-off gate are.
 
 ## Map
 
+- `LEARNING.md`: how to learn with this repo, from the 2025–2026 research on AI and skill formation
 - `CURRICULUM.md`: the 9 weeks, day by day (all written)
+- `scripts/review.py`: spaced retrieval over every `questions.md` you finish
 - `weeks/`: the labs
 - `drills/`: LeetCode-style problems, robotics-flavored, with tests
 - `knowledge/`: dense primers (VLM, VLA, JEPA, world models, diffusion, eval) with
