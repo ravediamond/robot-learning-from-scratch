@@ -16,6 +16,16 @@ dependencies = [
 [project.optional-dependencies]
 video = ["av>=12"]          # week 2: decode your SO-101 videos (uv sync --extra video)
 
+# On Linux, install the CPU build of torch (~200 MB) instead of the default CUDA build (~2 GB).
+# macOS wheels from PyPI are already CPU/MPS builds, so nothing changes there.
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+
 [tool.pytest.ini_options]
 addopts = "-q"
 testpaths = ["weeks", "drills"]

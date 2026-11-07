@@ -51,6 +51,7 @@ Green tests today measure what you produced, not what you will know next week. T
 *Built in:* `PROGRESS.md` weekly rows.
 
 ### 4. Spaced retrieval with feedback, every day
+Once, after cloning: `git fetch origin solutions:solutions` (the tool reads model answers from there).
 After each lab: `python scripts/review.py add <lab dir>`. Each day, start with `python scripts/review.py`
 (5 minutes, up to 6 cards). Answer out loud **before** seeing the model answer, then grade honestly. Cards come
 back after 1, 3, 7, 21, 60 days. Structured retrieval beat open-ended AI study by d = 0.92 over seven weeks.
