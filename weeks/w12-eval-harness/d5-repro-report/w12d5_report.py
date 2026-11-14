@@ -1,0 +1,54 @@
+"""W12 D5: fingerprints, run manifests, manifest diffs, results table."""
+import hashlib
+import json
+
+import torch
+
+from evalkit import wilson
+
+
+def tensor_fingerprint(state_dict: dict[str, torch.Tensor]) -> str:
+    """SHA-256 hex digest. For each key in sorted order, update the hash with: the key (utf-8), str(dtype),
+    str(tuple(shape)), and the raw bytes of tensor.detach().cpu().contiguous() (use .numpy().tobytes();
+    convert bfloat16 to its raw 16-bit pattern with .view(torch.int16) first, numpy has no bfloat16)."""
+    # TODO
+    raise NotImplementedError
+
+
+def config_hash(config: dict) -> str:
+    """SHA-256 hex of json.dumps(config, sort_keys=True) (utf-8): key order must not matter."""
+    # TODO
+    raise NotImplementedError
+
+
+def run_manifest(git_sha: str, checkpoint_fp: str, dataset_version: str, config: dict, hardware: dict,
+                 packages: dict) -> dict:
+    """{"git_sha", "checkpoint": checkpoint_fp, "dataset": dataset_version, "config": config,
+       "config_hash": config_hash(config), "hardware": hardware, "packages": packages}"""
+    # TODO
+    raise NotImplementedError
+
+
+def flatten(d: dict, prefix: str = "") -> dict:
+    """Nested dicts to dotted keys: {"a": {"b": 1}, "c": 2} -> {"a.b": 1, "c": 2}. Non-dict values are leaves."""
+    # TODO
+    raise NotImplementedError
+
+
+def manifest_diff(a: dict, b: dict) -> list[tuple]:
+    """Sorted list of (dotted key, value in a, value in b) for every flattened key whose values differ;
+    a key missing on one side has value None there."""
+    # TODO
+    raise NotImplementedError
+
+
+def results_table(rows: list[dict]) -> str:
+    """Markdown table, one line per row in the given order. rows: {"policy", "k", "n", "top_failure", "p95_ms"}.
+    Exact format:
+    | Policy | n | Success (95% CI) | Top failure | p95 latency (ms) |
+    |---|---|---|---|---|
+    | smolvla | 50 | 62% (48–74) | grasp | 182 |
+    Percents: round(100 * x) for k/n and the two Wilson bounds; the CI dash is an en dash (–); latency rounded
+    to an int; top_failure None is written as a dash (-). Lines joined with "\n", no trailing newline."""
+    # TODO
+    raise NotImplementedError

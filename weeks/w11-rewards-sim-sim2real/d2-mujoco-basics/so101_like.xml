@@ -1,0 +1,47 @@
+<mujoco model="so101_like">
+  <!-- A 5-joint arm with roughly the SO-101's link lengths and servo torque. Written for this repo:
+       NOT the official model. Collisions are off; only the dynamics of the links matter here. -->
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.002" integrator="implicitfast"/>
+  <default>
+    <joint damping="0.3" armature="0.02" frictionloss="0.05"/>
+    <geom type="capsule" size="0.015" density="700" rgba="0.95 0.6 0.1 1" contype="0" conaffinity="0"/>
+    <motor ctrlrange="-3 3" gear="1"/>
+  </default>
+  <worldbody>
+    <light pos="0 0 1.5"/>
+    <geom name="floor" type="plane" size="1 1 0.1" rgba="0.85 0.85 0.85 1"/>
+    <body name="base" pos="0 0 0.03">
+      <geom type="cylinder" size="0.045 0.03" rgba="0.2 0.2 0.2 1"/>
+      <body name="shoulder" pos="0 0 0.03">
+        <joint name="shoulder_pan" axis="0 0 1" range="-1.9 1.9"/>
+        <geom fromto="0 0 0 0 0 0.055"/>
+        <body name="upper_arm" pos="0 0 0.055">
+          <joint name="shoulder_lift" axis="0 1 0" range="-1.75 1.75"/>
+          <geom fromto="0 0 0 0 0 0.115"/>
+          <body name="forearm" pos="0 0 0.115">
+            <joint name="elbow_flex" axis="0 1 0" range="-1.7 1.7"/>
+            <geom fromto="0 0 0 0.135 0 0"/>
+            <body name="wrist" pos="0.135 0 0">
+              <joint name="wrist_flex" axis="0 1 0" range="-1.7 1.7"/>
+              <geom fromto="0 0 0 0.06 0 0"/>
+              <body name="hand" pos="0.06 0 0">
+                <joint name="wrist_roll" axis="1 0 0" range="-2.7 2.7"/>
+                <geom fromto="0 0 0 0.045 0 0" size="0.012" rgba="0.2 0.2 0.2 1"/>
+                <geom name="payload" type="sphere" size="0.012" pos="0.06 0 0" mass="0.05" rgba="0.1 0.4 0.9 1"/>
+                <site name="ee" pos="0.075 0 0" size="0.006" rgba="1 0 0 1"/>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <motor name="m_shoulder_pan" joint="shoulder_pan"/>
+    <motor name="m_shoulder_lift" joint="shoulder_lift"/>
+    <motor name="m_elbow_flex" joint="elbow_flex"/>
+    <motor name="m_wrist_flex" joint="wrist_flex"/>
+    <motor name="m_wrist_roll" joint="wrist_roll"/>
+  </actuator>
+</mujoco>

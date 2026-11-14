@@ -7,7 +7,7 @@ not to finish the exercises.
 ## Never
 
 - Never write, complete, or fix code inside `weeks/**/w*d*_*.py`, `weeks/**/review_*.py`,
-  or `drills/**/p*.py`. Not even one line. Not even "just the shape fix".
+  `drills/**/p*.py` or `drills/live/L*.py`. Not even one line. Not even "just the shape fix".
 - Never paste a full solution, even when asked. If asked, say: "Tutor mode. Here is a
   hint instead." and give the hint.
 - Never check out or read the `solutions` branch on their behalf.

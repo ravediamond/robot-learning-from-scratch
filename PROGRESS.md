@@ -144,6 +144,70 @@ Each Friday retro, also answer: hardest lab (= next Monday's delayed-recall targ
 - Pace (too easy / right / too hard):
 - What to change:
 
+## Week 10: reinforcement learning
+| Day | Predict misses | Build | Review | Questions out loud | Redo | Notes |
+|---|---|---|---|---|---|---|
+| d1 returns & PG |  |  |  |  |  |  |
+| d2 PPO |  |  |  |  |  |  |
+| d3 SAC |  |  |  |  |  |  |
+| d4 offline RL (IQL) |  |  |  |  |  |  |
+| d5 RECAP-style conditioning |  |  |  |  |  |  |
+
+## Week 11: rewards & simulation
+| Day | Predict misses | Build | Review | Questions out loud | Redo | Notes |
+|---|---|---|---|---|---|---|
+| d1 reward models |  |  |  |  |  |  |
+| d2 MuJoCo basics |  |  |  |  |  |  |
+
+## Week 12: evaluation harness
+| Day | Predict misses | Build | Review | Questions out loud | Redo | Notes |
+|---|---|---|---|---|---|---|
+| d1 protocol |  |  |  |  |  |  |
+| d2 several policies |  |  |  |  |  |  |
+| d3 failure taxonomy |  |  |  |  |  |  |
+| d4 latency on target |  |  |  |  |  |  |
+| d5 reproducibility + design |  |  |  |  |  |  |
+
+## Week 13: robot data
+| Day | Predict misses | Build | Review | Questions out loud | Redo | Notes |
+|---|---|---|---|---|---|---|
+| d1 dataset QA |  |  |  |  |  |  |
+| d2 curation & splits |  |  |  |  |  |  |
+| d3 mixtures & scaling |  |  |  |  |  |  |
+| d4 video at scale |  |  |  |  |  |  |
+| d5 flywheel + design |  |  |  |  |  |  |
+
+## Week 14: edge deployment
+| Day | Predict misses | Build | Review | Questions out loud | Redo | Notes |
+|---|---|---|---|---|---|---|
+| d1 export & parity |  |  |  |  |  |  |
+| d2 quantisation |  |  |  |  |  |  |
+| d3 real-time chunking |  |  |  |  |  |  |
+| d4 safety layer |  |  |  |  |  |  |
+| d5 fleet rollout + design |  |  |  |  |  |  |
+
+## Live PyTorch rounds (time, first bug, redo date)
+| Drill | Time | First bug | Redo (48 h) |
+|---|---|---|---|
+| L01 causal MHA |  |  |  |
+| L02 norms |  |  |  |
+| L03 cross-entropy |  |  |  |
+| L04 sampling |  |  |  |
+| L05 RoPE |  |  |  |
+| L06 flow matching |  |  |  |
+| L07 training step |  |  |  |
+| L08 block |  |  |  |
+| L09 IoU + NMS |  |  |  |
+| L10 quaternions |  |  |  |
+
+## Flagship milestones
+| Milestone | Date | Notes |
+|---|---|---|
+| M0 harness green + demo report |  |  |
+| M1 pilot (2 × 20) |  |  |
+| M2 full run (4 × 50) |  |  |
+| M3 page published |  |  |
+
 ## Reading slot (20 min a week)
 | Week | File | Time | Misses vs the map | Question for the author |
 |---|---|---|---|---|
