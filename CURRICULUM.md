@@ -1,4 +1,4 @@
-# Curriculum: 9 weeks, 45 sessions (all written)
+# Curriculum: Part 1 (9 weeks, 45 sessions) and Part 2 (weeks 10–14 and growing)
 
 Each lab: README (concept) → predict.md / predict_run.py → build with tests → review (planted bug) →
 questions.md (out loud). Solutions and model answers: `solutions` branch. After each Friday, write the
@@ -92,6 +92,55 @@ your LeWM, your RTC controller, your harness). Maps: `knowledge/09` (LeRobot), `
 | Thu | d4 Research verdict | paper → experiment template (pre-registered), your pass / fail / not-proven rule as code |
 | Fri | d5 System design & pushback | data-flywheel design (rubric), 5 pushback prompts, opener, final retro |
 
+## Part 2 (see `ROADMAP.md`; for a data / evaluation / deployment application, `RE_TRACK.md` gives the order)
+
+## Week 10: Reinforcement learning  · K: `11-reinforcement-learning`
+| Day | Lab | Build | Review bug |
+|---|---|---|---|
+| Mon | d1 Returns & policy gradient | returns, GAE, Gaussian policy, REINFORCE with a baseline | returns leak across episodes |
+| Tue | d2 PPO | clipped objective, normalisation, update loop, solves Reach2D | `max` instead of `min` |
+| Wed | d3 SAC | tanh-Gaussian log-prob, twin-Q target, soft update, temperature, replay | missing tanh correction |
+| Thu | d4 Offline RL (IQL) | expectile value, AWR policy; beats BC on mixed data | expectile weights swapped |
+| Fri | d5 RECAP-style conditioning | value, n-step advantages, per-task indicator, conditioned policy | one global threshold |
+
+## Week 11: Reward models and simulation  · K: `11`, `12-simulation-sim2real`
+| Day | Lab | Build | Review bug |
+|---|---|---|---|
+| Mon | d1 Reward models | success classifier, precision-first threshold, pairwise progress model | pairs across episodes |
+| Tue | d2 MuJoCo basics | substeps, PD + gravity compensation, Jacobian, damped least-squares IK (SO-101-like arm) | `int()` truncates substeps |
+
+## Week 12: The evaluation harness (flagship engine)  · K: `13-evaluation-at-scale` · `flagship/`
+| Day | Lab | Build | Review bug |
+|---|---|---|---|
+| Mon | d1 Protocol | counterbalanced blocked schedule, blinding, record validation, drift | policies run back to back |
+| Tue | d2 Several policies | McNemar per pair, Holm, rank probabilities, minimum detectable difference | bootstrap breaks pairing |
+| Wed | d3 Failure taxonomy | Cohen's κ, per-cause rates with CIs, stage funnel | rates over failures only |
+| Thu | d4 Latency on target | percentiles, deadlines, sync vs async chunk budgets, starvation | p99 from mean + σ |
+| Fri | d5 Reproducibility + **design** | fingerprints, manifests, diffs, results table; evaluation program design | checkpoint hashed via `str()` |
+
+## Week 13: Robot data engineering  · K: `14-robot-data-engineering`
+| Day | Lab | Build | Review bug |
+|---|---|---|---|
+| Mon | d1 Dataset QA | frozen cameras, dead joints, limits, robust outliers, duplicates, quarantine | mean ± 3σ masking |
+| Tue | d2 Curation & splits | near-duplicates, group splits, dataset fingerprint, removal ledger | random episode split |
+| Wed | d3 Mixtures & scaling | temperature sampling, per-item weights, power-law fit, seeded ablations | weights not divided by size |
+| Thu | d4 Video at scale | storage and decode budgets, worker sharding, shuffle buffer | workers read the same shards |
+| Fri | d5 Flywheel + **design** | intervention segments, review queue, collection planning; fleet data platform | policy actions as labels |
+
+## Week 14: Deployment on the robot's computer  · K: `15-edge-deployment`
+| Day | Lab | Build | Review bug |
+|---|---|---|---|
+| Mon | d1 Export & parity | deployable wrapper with stats as buffers, ONNX, parity, dynamic batch; TensorRT notes | batch frozen at 1 |
+| Tue | d2 Quantisation | per-tensor vs per-channel int8, percentile calibration, fake quant + STE | no straight-through |
+| Wed | d3 Real-time chunking | shift, soft mask, guided flow sampling; mode switches and seam jumps | prefix not shifted |
+| Thu | d4 Safety layer | limits, rate limits, capture-time watchdog, NaN guard, e-stop latch | staleness from receipt time |
+| Fri | d5 Fleet rollout + **design** | fingerprint check, shadow mode, canary rate test, stages; VLA on 20 robots | counts instead of rates |
+
+## Live PyTorch rounds (30–45 min, AI off): `drills/live` L01–L10
+causal MHA with KV cache · LayerNorm/RMSNorm · cross-entropy with ignore index and smoothing · top-k/top-p ·
+RoPE · flow-matching loss + sampler · training step (accumulation, clipping, warmup + cosine) · transformer
+block + parameter count · IoU + NMS · quaternions.
+
 ## LeetCode drills (15 min, any day): `drills/w1` … `drills/w8`
 w1 hash map, stack, monotonic deque, intervals, binary search · w2 two pointers, sliding window ·
 w3 heaps · w4 grid BFS/DFS · w5 union-find, topo sort, Dijkstra, cycles · w6 DP · w7 DP + scheduling ·
@@ -99,4 +148,4 @@ w8 design (LRU, trie, ring buffer, in-place rotation). Pattern notes: `drills/PA
 
 ## On your Mac only (needs internet or your data)
 W2 D4 `download_bowls.py` + `inspect_real.py` · W2 D5 `extract_frames.py` + `train_real.py` ·
-W3 D5 `GPT2_REAL=1` test + `train_char.py` · W6 D3 `length_null_real.py`.
+W3 D5 `GPT2_REAL=1` test + `train_char.py` · W6 D3 `length_null_real.py` · `flagship/` (your SO-101 + Orin).

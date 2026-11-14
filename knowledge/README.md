@@ -17,6 +17,11 @@ depth layer (per-paper chapters, your own gate results).
 | `08-question-bank.md` | mixed mock: system design, your work, pushback | 9 | 16, exercises/interview |
 | `09-lerobot-reading-map.md` | LeRobot 0.6.2 plumbing: configs, processors, queue, checkpoints, inference | any (reading slot) | 14b |
 | `10-orin-harness-audit-map.md` | where to look to check a result Claude Code produced | any (reading slot) | `docs/HARNESS.md` in road-to-robotics |
+| `11-reinforcement-learning.md` | PG, GAE, PPO, SAC, offline RL, RECAP, rewards | 10, 11 | |
+| `12-simulation-sim2real.md` | MuJoCo objects, control in sim, the reality gap, sim–real correlation | 11 | |
+| `13-evaluation-at-scale.md` | protocols, several policies, failures, latency, reproducibility, programs | 12 | |
+| `14-robot-data-engineering.md` | QA, curation, splits, mixtures, video at scale, flywheel | 13 | |
+| `15-edge-deployment.md` | export, quantisation, real-time chunking, safety layer, fleet rollout | 14 | |
 
 ## How to study a primer (30–45 min, on 2h days or weekends)
 

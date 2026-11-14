@@ -1,15 +1,20 @@
 # Robot Learning From Scratch
 
-9 weeks. 1 hour a day, Monday to Friday. Goal: write PyTorch yourself, understand
+Part 1: 9 weeks, 1 hour a day, Monday to Friday. Goal: write PyTorch yourself, understand
 every piece of a VLA + world-model stack, spot when generated code is wrong, and
 pass the coding and research rounds of a top robotics startup.
+
+Part 2 (weeks 10–14 and growing, `ROADMAP.md`): reinforcement learning, reward models and simulation,
+the evaluation harness behind a real-robot flagship (`flagship/`), robot data engineering, deployment on
+the robot's computer, and timed live PyTorch rounds (`drills/live`). Applying for a data / evaluation /
+deployment research-engineer role: follow `RE_TRACK.md`.
 
 No GPU needed. Everything runs on a Mac (CPU or MPS) in under 5 minutes.
 
 ## Setup (once)
 
 ```bash
-uv sync                      # installs torch, numpy, pytest, matplotlib
+uv sync                      # installs torch, numpy, pytest, matplotlib, mujoco, onnx, onnxruntime
 uv run pytest weeks/w1-pytorch-basics/d1-tensors-shapes   # should FAIL: you have work to do
 ```
 
@@ -53,7 +58,10 @@ Then read the knowledge primer for the week (`knowledge/`).
 ## Map
 
 - `LEARNING.md`: how to learn with this repo, from the 2025–2026 research on AI and skill formation
-- `CURRICULUM.md`: the 9 weeks, day by day (all written)
+- `CURRICULUM.md`: every week, day by day
+- `RE_TRACK.md`: the order of work for a data / evaluation / deployment research-engineer application
+- `ROADMAP.md`: Part 2 tracks and their status
+- `flagship/`: protocol, pre-registration, run sheets and analysis for the 4-policy SO-101 comparison
 - `scripts/review.py`: spaced retrieval over every `questions.md` you finish
 - `weeks/`: the labs
 - `drills/`: LeetCode-style problems, robotics-flavored, with tests

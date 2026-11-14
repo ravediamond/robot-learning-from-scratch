@@ -1,7 +1,7 @@
 [project]
 name = "robot-learning-from-scratch"
 version = "0.1.0"
-description = "9-week hands-on path: PyTorch, VLA, JEPA world models, interview prep"
+description = "Hands-on path: PyTorch, VLA, JEPA world models, RL, evaluation, robot data, edge deployment, interview prep"
 requires-python = ">=3.11"
 dependencies = [
     "torch>=2.4",
@@ -11,6 +11,9 @@ dependencies = [
     "pandas>=2.0",
     "pyarrow>=14",
     "transformers>=4.40",   # week 3: check your GPT-2 against Hugging Face
+    "mujoco>=3.1",          # week 11: simulation
+    "onnx>=1.16",           # week 14: export
+    "onnxruntime>=1.18",    # week 14: runtime parity
 ]
 
 [project.optional-dependencies]

@@ -1,0 +1,38 @@
+"""W14 D2: symmetric int8 quantisation, calibration, fake quantisation with a straight-through estimator."""
+import torch
+from torch import nn
+
+QMAX = 127
+
+
+def quantize(w: torch.Tensor, per_channel: bool = True) -> tuple[torch.Tensor, torch.Tensor]:
+    """Symmetric int8. scale = max|w| / 127, per output channel (dim 0, shape (C, 1, ..., 1)) or one scalar.
+    q = clamp(round(w / scale), -127, 127) as torch.int8. A zero channel uses scale 1.0. Return (q, scale)."""
+    # TODO
+    raise NotImplementedError
+
+
+def dequantize(q: torch.Tensor, scale: torch.Tensor) -> torch.Tensor:
+    # TODO
+    raise NotImplementedError
+
+
+def percentile_scale(x: torch.Tensor, pct: float) -> float:
+    """Scale from the pct-th percentile of |x| (torch.quantile on a float tensor, q = pct / 100), divided by 127."""
+    # TODO
+    raise NotImplementedError
+
+
+def fake_quant(x: torch.Tensor, scale: float) -> torch.Tensor:
+    """Quantise-dequantise in the forward pass (clamp to [-127, 127] after rounding), identity gradient
+    (straight-through estimator) inside the clamp range: return x + (xq - x).detach()."""
+    # TODO
+    raise NotImplementedError
+
+
+@torch.no_grad()
+def quantize_linear_weights(model: nn.Module, per_channel: bool = True) -> dict[str, float]:
+    """Replace every nn.Linear weight IN PLACE by its int8 round trip (dequantize(quantize(w))).
+    Return {module name: relative error mean|w_q - w| / mean|w|} for each Linear."""
+    # TODO
+    raise NotImplementedError
