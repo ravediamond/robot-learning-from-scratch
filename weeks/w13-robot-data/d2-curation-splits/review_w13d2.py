@@ -1,14 +1,21 @@
-"""REVIEW. Train/validation split of the team's policy-training script. Validation success-prediction is
-excellent and real-robot results are much worse; the dataset has 40 sessions with different lighting.
-Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: episodes are split at random, so almost every validation episode has siblings from the same session in
+training: same lighting, objects, operator habits. Validation then measures memorisation of the session.
+Split by session (a whole session goes to one side), so validation measures generalisation to new sessions.
 """
 import random
 
 
 def split(episode_sessions: list[str], val_frac: float = 0.2, seed: int = 0) -> tuple[list[int], list[int]]:
-    """episode_sessions[i] = session of episode i. Returns (train ids, val ids)."""
-    ids = list(range(len(episode_sessions)))
-    random.Random(seed).shuffle(ids)
-    k = int(val_frac * len(ids))
-    return sorted(ids[k:]), sorted(ids[:k])
+    sessions = sorted(set(episode_sessions))
+    random.Random(seed).shuffle(sessions)
+    target, val_sessions, n = val_frac * len(episode_sessions), set(), 0
+    for s in sessions:
+        if n >= target:
+            break
+        val_sessions.add(s)
+        n += episode_sessions.count(s)
+    val = [i for i, s in enumerate(episode_sessions) if s in val_sessions]
+    train = [i for i, s in enumerate(episode_sessions) if s not in val_sessions]
+    return train, val

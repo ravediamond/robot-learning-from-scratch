@@ -1,0 +1,8 @@
+# Model answers
+
+1. J = E_τ[R(τ)] = ∫ p(τ) R(τ) dτ. ∇J = ∫ p(τ) ∇log p(τ) R(τ) dτ = E[∇log p(τ) R(τ)]. log p(τ) = log p(s0) + Σ log π(a_t|s_t) + Σ log P(s_{t+1}|s_t,a_t); only the policy terms depend on θ, so the dynamics drop out: we never differentiate the environment, only sample from it.
+2. E_a[∇log π(a|s) b(s)] = b(s) ∇ Σ_a π(a|s) = b(s) ∇1 = 0. The baseline must not depend on the action taken (it may depend on the state and on time).
+3. λ = 0: the one-step TD error r + γV(s') − V(s): low variance, biased by the errors of V. λ = 1: the Monte-Carlo return minus V: unbiased, high variance. Raising λ trades bias for variance; 0.95 is the usual value.
+4. A true terminal state has no future: target = r. A time limit cuts an episode that would have continued: the future still has value, so bootstrap with V(s') (or put the time in the observation). Treating time-outs as terminal teaches the value function that the world ends at step T.
+5. With no success in the batch every return is 0 and the gradient is exactly zero: there is nothing to reinforce, and random exploration almost never finishes a long task. Ways out: start from demonstrations (BC pre-training, demos in the replay buffer); shape the reward or learn one (progress or success models, W11 D1); curricula or resets near the goal; hindsight relabelling of goals; better exploration is the weakest of these on real robots.
+6. It throws data away after one update and needs very many episodes; exploration noise on hardware is slow, unsafe and wears the robot. In practice: train in simulation and transfer (W11), off-policy methods with demos and human interventions (HIL-SERL), or offline/advantage-conditioned improvement of an imitation policy from logged robot data (W10 D4–D5).

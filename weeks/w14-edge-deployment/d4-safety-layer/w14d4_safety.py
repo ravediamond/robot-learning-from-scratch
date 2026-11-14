@@ -4,20 +4,17 @@ import numpy as np
 
 def clamp_limits(cmd: np.ndarray, limits: np.ndarray, margin: float) -> np.ndarray:
     """Clamp each joint into [low + margin, high - margin]. limits: (J, 2)."""
-    # TODO
-    raise NotImplementedError
+    return np.clip(cmd, limits[:, 0] + margin, limits[:, 1] - margin)
 
 
 def rate_limit(prev: np.ndarray, cmd: np.ndarray, max_step: float) -> np.ndarray:
     """Move from prev towards cmd by at most max_step per joint."""
-    # TODO
-    raise NotImplementedError
+    return prev + np.clip(cmd - prev, -max_step, max_step)
 
 
 def is_stale(capture_time: float, now: float, max_age: float) -> bool:
     """True if the observation was CAPTURED more than max_age seconds before now."""
-    # TODO
-    raise NotImplementedError
+    return now - capture_time > max_age
 
 
 class SafetyFilter:
@@ -30,13 +27,13 @@ class SafetyFilter:
 
     def estop(self) -> None:
         """Latch the stop."""
-        # TODO
-        raise NotImplementedError
+        self.latched = True
+        self.events.append("estop")
 
     def reset(self) -> None:
         """Explicit operator reset: clears the latch."""
-        # TODO
-        raise NotImplementedError
+        self.latched = False
+        self.events.append("reset")
 
     def step(self, cmd: np.ndarray, capture_time: float, now: float) -> np.ndarray:
         """Return the command to send and update self.last. In this order:
@@ -45,5 +42,15 @@ class SafetyFilter:
         - stale observation: hold, event "stale";
         - otherwise: clamp_limits, then rate_limit from self.last (no event).
         Events are appended to self.events. Always return a copy."""
-        # TODO
-        raise NotImplementedError
+        if self.latched:
+            self.events.append("latched")
+            return self.last.copy()
+        if not np.all(np.isfinite(cmd)):
+            self.events.append("nonfinite")
+            return self.last.copy()
+        if is_stale(capture_time, now, self.max_age):
+            self.events.append("stale")
+            return self.last.copy()
+        safe = rate_limit(self.last, clamp_limits(cmd, self.limits, self.margin), self.max_step)
+        self.last = safe
+        return safe.copy()

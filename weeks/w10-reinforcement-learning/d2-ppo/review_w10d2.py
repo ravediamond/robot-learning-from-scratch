@@ -1,6 +1,7 @@
-"""REVIEW. PPO loss from a teammate's branch. Training is unstable: the policy takes huge steps and the
-return collapses after a few iterations. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: torch.max instead of torch.min. The clipped objective must be the PESSIMISTIC one: with max, the
+clip is only active when it increases the objective, so nothing stops the ratio from running away.
 """
 import torch
 
@@ -9,4 +10,4 @@ def ppo_loss(logp_new, logp_old, adv, clip=0.2):
     ratio = (logp_new - logp_old).exp()
     surr1 = ratio * adv
     surr2 = ratio.clamp(1 - clip, 1 + clip) * adv
-    return -torch.max(surr1, surr2).mean()
+    return -torch.min(surr1, surr2).mean()

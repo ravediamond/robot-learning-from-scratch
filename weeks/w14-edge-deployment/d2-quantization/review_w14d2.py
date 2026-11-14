@@ -1,9 +1,12 @@
-"""REVIEW. Quantisation-aware fine-tuning of the gripper head. The loss is flat from the first step and the weights
-never change, though the learning rate is fine. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: round() has zero gradient almost everywhere, so no gradient reaches the weights through the fake-quantised
+path: training cannot move them. Use the straight-through estimator: forward with the quantised value, backward
+as if it were the identity: x + (xq - x).detach().
 """
 import torch
 
 
 def fake_quant(x: torch.Tensor, scale: float) -> torch.Tensor:
-    return torch.clamp(torch.round(x / scale), -127, 127) * scale
+    xq = torch.clamp(torch.round(x / scale), -127, 127) * scale
+    return x + (xq - x).detach()

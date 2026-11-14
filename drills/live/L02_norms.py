@@ -13,8 +13,9 @@ class LayerNorm(nn.Module):
         self.bias = nn.Parameter(torch.zeros(dim))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # TODO
-        raise NotImplementedError
+        mean = x.mean(dim=-1, keepdim=True)
+        var = x.var(dim=-1, keepdim=True, unbiased=False)
+        return (x - mean) / torch.sqrt(var + self.eps) * self.weight + self.bias
 
 
 class RMSNorm(nn.Module):
@@ -26,5 +27,4 @@ class RMSNorm(nn.Module):
         self.weight = nn.Parameter(torch.ones(dim))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # TODO
-        raise NotImplementedError
+        return x * torch.rsqrt(x.pow(2).mean(dim=-1, keepdim=True) + self.eps) * self.weight

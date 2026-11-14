@@ -1,15 +1,17 @@
-"""REVIEW. Pair sampler for the progress model. The learned reward rises with elapsed time even when the arm
-does nothing, and RL learns to wait. Find the bug, fix, replace:
-BUG:
+"""REVIEW. SOLUTION.
+
+BUG: a and b are drawn from the whole dataset, so most pairs mix two episodes. Their order in time says
+nothing about progress (different starts and goals); the model can only learn "later = better". Draw the
+episode first, then two different times inside it.
 """
 import torch
 
 
 def sample_pairs(episode: torch.Tensor, t: torch.Tensor, n_pairs: int, generator=None):
-    """Rows are time-major: row = t * n_episodes + e. Returns (idx_a, idx_b, label: b later than a)."""
-    n = len(episode)
-    idx_a = torch.randint(0, n, (n_pairs,), generator=generator)
-    idx_b = torch.randint(0, n, (n_pairs,), generator=generator)
-    keep = t[idx_a] != t[idx_b]
-    idx_a, idx_b = idx_a[keep], idx_b[keep]
+    n_ep = int(episode.max().item()) + 1
+    T = len(episode) // n_ep
+    e = torch.randint(0, n_ep, (n_pairs,), generator=generator)
+    ta = torch.randint(0, T, (n_pairs,), generator=generator)
+    tb = (ta + torch.randint(1, T, (n_pairs,), generator=generator)) % T
+    idx_a, idx_b = ta * n_ep + e, tb * n_ep + e
     return idx_a, idx_b, (t[idx_b] > t[idx_a]).float()

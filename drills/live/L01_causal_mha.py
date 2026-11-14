@@ -21,5 +21,20 @@ class CausalSelfAttention(nn.Module):
         self.q, self.k, self.v, self.out = (nn.Linear(dim, dim) for _ in range(4))
 
     def forward(self, x: torch.Tensor, cache: dict | None = None):
-        # TODO
-        raise NotImplementedError
+        B, T, C = x.shape
+
+        def heads(t):
+            return t.view(B, T, self.h, self.d).transpose(1, 2)        # (B, H, T, D)
+
+        q, k, v = heads(self.q(x)), heads(self.k(x)), heads(self.v(x))
+        if cache is not None:
+            k = torch.cat([cache["k"], k], dim=2)
+            v = torch.cat([cache["v"], v], dim=2)
+        S = k.shape[2] - T                                                 # number of past positions
+        scores = q @ k.transpose(-2, -1) / math.sqrt(self.d)               # (B, H, T, S + T)
+        qpos = torch.arange(T, device=x.device)[:, None] + S
+        kpos = torch.arange(S + T, device=x.device)[None, :]
+        scores = scores.masked_fill(kpos > qpos, float("-inf"))
+        y = scores.softmax(dim=-1) @ v                                     # (B, H, T, D)
+        y = y.transpose(1, 2).reshape(B, T, C)
+        return self.out(y), {"k": k, "v": v}
