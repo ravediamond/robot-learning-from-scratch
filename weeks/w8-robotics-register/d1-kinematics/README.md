@@ -1,5 +1,8 @@
 # W8 D1: Forward and inverse kinematics for an SO-101-like arm
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-kinematics) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 10a.1–10a.2 (frames, kinematics), 10 (the hardware from first principles).
 
 ## Homogeneous transforms

@@ -1,5 +1,8 @@
 # W13 D5: the data flywheel + design
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-the-data-flywheel-a-design) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/14-robot-data-engineering.md` §5.
 
 ## The one idea

@@ -1,5 +1,8 @@
 # W2 D2: Training that does not blow up
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-2-training-that-does-not-blow-up) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: P2.7 (optimisers and schedules), P2.14 (debugging tools). Coding list item 10.
 
 ## Four habits

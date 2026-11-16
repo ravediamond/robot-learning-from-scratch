@@ -1,5 +1,8 @@
 # W10 D2: PPO
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-2-ppo) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/11-reinforcement-learning.md` §3. Paper: Schulman et al., 2017.
 
 ## The idea

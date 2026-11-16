@@ -1,5 +1,8 @@
 # W14 D1: export with numerical parity
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-export-with-numerical-parity) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/15-edge-deployment.md` §1.
 
 ## The one idea

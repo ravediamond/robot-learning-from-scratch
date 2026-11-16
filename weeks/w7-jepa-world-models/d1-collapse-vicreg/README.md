@@ -1,5 +1,8 @@
 # W7 D1: Representation collapse, and VICReg
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-collapse-and-vicreg) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/05-jepa-ssl.md`. Book: 12.2 (collapse and the three ways to prevent it).
 
 ## The trap

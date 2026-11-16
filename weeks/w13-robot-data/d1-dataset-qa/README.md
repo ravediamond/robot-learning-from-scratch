@@ -1,5 +1,8 @@
 # W13 D1: dataset QA at scale
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-dataset-qa-at-scale) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/14-robot-data-engineering.md` §1. W2 D4 checked one episode by hand (gaps, idle, lag).
 
 ## The one idea

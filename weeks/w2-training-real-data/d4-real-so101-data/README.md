@@ -1,5 +1,8 @@
 # W2 D4: Your real SO-101 data, by hand
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-4-your-real-so-101-data-by-hand) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 10b (the data pipeline), 10a.5 (two clocks). Data: `ravediamond/so101_bowls_all_trimmed`
 (182 episodes, 61,462 frames at 30 fps, 2 cameras, idle starts trimmed: register row 2026-10-01).
 

@@ -1,5 +1,8 @@
 # W2 D5: A pixel + state policy, on toy pixels then on your real data
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-a-pixel--state-policy) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 11.1–11.2 (BC, chunking), 10b. Builds on D1 (windows), D3 (CNN + random shift), D4 (real data).
 
 ## The one idea

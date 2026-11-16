@@ -11,6 +11,17 @@ deployment research-engineer role: follow `RE_TRACK.md`.
 
 No GPU needed. Everything runs on a Mac (CPU or MPS) in under 5 minutes.
 
+## Start here
+
+1. Do the setup below (once).
+2. Open **[`weeks/w1-pytorch-basics/README.md`](weeks/w1-pytorch-basics/README.md)**. It is the full lesson for week 1 and tells you
+   what to open, in which order, every day. You need nothing outside that folder.
+3. Each following week works the same way: one folder, one `README.md` that holds everything for the week.
+   The list of weeks, in order: [`weeks/README.md`](weeks/README.md).
+
+Everything else in this repo (`knowledge/`, `reference/`, `reading/`, `drills/`, `flagship/`) is optional depth or a
+separate short slot. Each week page says when to open them. You never have to go looking.
+
 ## Setup (once)
 
 ```bash
@@ -27,7 +38,7 @@ attempt before help, AI as a complement never a substitute, spaced retrieval, AI
 |---|---|---|---|
 | 0–5 | Retrieve | `scripts/review.py` | Spaced retrieval: answer due cards out loud before seeing the model answer. Mondays: 10-min delayed recall instead (`LEARNING.md` rule 3). |
 | 5–10 | Cold attempt | `predict.md` | Write your guesses BEFORE reading the README. Wrong guesses help (pretesting effect). |
-| 10–18 | Read | `README.md` | One page. The concept, nothing more. |
+| 10–18 | Read | the week page, `weeks/<week>/README.md`, section of the day | The full lesson for the day: concepts from zero, examples, traps. (The day folder's own `README.md` is its one-page summary.) |
 | 18–20 | Check | `predict_run.py` | `uv run python predict_run.py` and compare. Every miss = something you did not understand. Write one line on why. |
 | 20–45 | Build | `wXdY_*.py` | Fill the `TODO`s. Run `uv run pytest <lab dir> -k "not review"` until green. AI off; debug alone 10 min before any hint. |
 | 45–53 | Review | `review_*.py` | Code that looks right and is wrong. Find the bug, fix it, write a one-line explanation at the top of the file. `uv run pytest <lab dir> -k review` turns green when fixed. |
@@ -39,7 +50,7 @@ Plus, **once a week, 20 min reading slot** (`reading/`): one real file (LeRobot,
 10-line note. That is the skill you need to check Claude Code's work on the Orin.
 
 On 2-hour days: delete your solution and redo the lab from a blank file, no notes.
-Then read the knowledge primer for the week (`knowledge/`).
+Then read the knowledge primer for the week (`knowledge/`): interview questions with short answers, optional for the labs.
 
 ## Rules
 
@@ -63,10 +74,10 @@ Then read the knowledge primer for the week (`knowledge/`).
 - `ROADMAP.md`: Part 2 tracks and their status
 - `flagship/`: protocol, pre-registration, run sheets and analysis for the 4-policy SO-101 comparison
 - `scripts/review.py`: spaced retrieval over every `questions.md` you finish
-- `weeks/`: the labs
+- `weeks/`: the course. One folder per week; each has a `README.md` with the full lesson for the week and one sub-folder per day with the lab. Index: `weeks/README.md`
 - `drills/`: LeetCode-style problems, robotics-flavored, with tests
 - `knowledge/`: dense primers (VLM, VLA, JEPA, world models, diffusion, eval) with
-  interview questions. This is the research-discussion round.
+  interview questions. This is the research-discussion round. Not needed to do the labs.
 - `reference/`: your own book, paper drafts and register (snapshot from `road-to-robotics`).
   Labs and primers link into it. The book's live-coding list (`exercises/coding/README.md`)
   is what these labs make runnable, with tests.

@@ -1,5 +1,8 @@
 # W2 D1: Dataset, DataLoader, episode windows
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-datasets-loaders-episode-windows) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: P2.8, 10b (the data pipeline). Coding list item 20.
 
 ## The one idea

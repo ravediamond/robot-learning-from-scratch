@@ -1,5 +1,8 @@
 # W6 D3: Failure detection: AUROC, operating points, conformal thresholds
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-failure-detection) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 7.5 (AUROC and its standard error), 13.2 (monitors). Primer 06 and 07. Your paper:
 `reference/journal/papers/failure-monitors/` (the length null).
 

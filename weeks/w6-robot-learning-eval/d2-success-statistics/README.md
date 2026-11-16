@@ -1,5 +1,8 @@
 # W6 D2: Success-rate statistics you can do on a whiteboard
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-2-success-rate-statistics) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/07-robot-eval-statistics.md`. Book: chapter 7 (uncertainty). Coding list 17, 18.
 Your register reports Wilson and bootstrap intervals everywhere: today you write them yourself.
 

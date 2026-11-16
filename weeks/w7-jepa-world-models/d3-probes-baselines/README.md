@@ -1,5 +1,8 @@
 # W7 D3: Is my latent any good? Probes and baselines
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-probes-and-baselines) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/05-jepa-ssl.md` ("How you know your latent is any good"). Book: 12.3–12.4, 6.
 
 A world model's loss going down proves nothing. Three cheap instruments, always together:

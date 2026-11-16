@@ -1,5 +1,8 @@
 # W11 D2: MuJoCo basics on an SO-101-like arm
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-2-mujoco-basics) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/12-simulation-sim2real.md` §1–2. Docs: mujoco.readthedocs.io (Programming → Simulation).
 
 ## The objects

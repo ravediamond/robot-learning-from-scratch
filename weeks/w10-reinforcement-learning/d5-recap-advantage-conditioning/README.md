@@ -1,5 +1,8 @@
 # W10 D5: RECAP-style advantage conditioning
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-recap-style-advantage-conditioning) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/11-reinforcement-learning.md` §6. Paper: Physical Intelligence, "π*0.6: a VLA That Learns
 From Experience" (arXiv 2511.14759).
 

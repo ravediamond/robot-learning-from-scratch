@@ -1,5 +1,8 @@
 # W6 D5: Compounding error and DAgger (capstone, part 2)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-compounding-error-and-dagger) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 11.1 (BC from first principles). Primer 03 (compounding error). Uses `dagger_world.py` (read it).
 
 ## The problem

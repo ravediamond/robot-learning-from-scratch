@@ -1,5 +1,8 @@
 # W10 D4: Offline RL with IQL
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-4-offline-rl-with-iql) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/11-reinforcement-learning.md` §5. Paper: Kostrikov et al., 2021 (IQL).
 
 ## The problem

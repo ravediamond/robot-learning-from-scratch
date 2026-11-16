@@ -1,5 +1,8 @@
 # W1 D1: Tensors and shapes
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-tensors-and-shapes) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: P2.1, P2.2 (`reference/journal/book/00p2-pytorch-for-the-coding-round.md`). Coding list items 05, 20 (start).
 
 ## The one idea

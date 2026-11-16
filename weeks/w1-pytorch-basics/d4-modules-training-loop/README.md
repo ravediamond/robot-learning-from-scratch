@@ -1,5 +1,8 @@
 # W1 D4: nn.Module and the training loop
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-4-nnmodule-and-the-training-loop) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: P2.4 to P2.9, P2.14. Coding list items 03 (training loop), 09 (tiny MLP).
 
 ## The one idea

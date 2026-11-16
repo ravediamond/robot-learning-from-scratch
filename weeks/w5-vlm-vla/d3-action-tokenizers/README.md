@@ -1,5 +1,8 @@
 # W5 D3: Action tokenizers: bins vs DCT (FAST-style)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-action-tokenizers) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/03-vla.md`. RT-2 / OpenVLA emit actions as text tokens; π0-FAST compresses
 chunks with a DCT first. Knowing why decides "tokens or flow head" in a design discussion.
 

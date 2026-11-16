@@ -1,5 +1,8 @@
 # W10 D3: SAC, the off-policy workhorse
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-sac) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/11-reinforcement-learning.md` §4. Papers: Haarnoja et al., 2018 (SAC); Luo et al., 2024 (HIL-SERL, SAC on real robots).
 
 ## Why off-policy

@@ -1,5 +1,8 @@
 # W4 D1: Why MSE fails on demonstrations, and the VAE
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-why-mse-fails-and-the-vae) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/04-diffusion-flow-matching.md`. Book: 11.3.
 
 ## MSE predicts the mean

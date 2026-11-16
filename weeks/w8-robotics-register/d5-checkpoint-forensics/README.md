@@ -1,5 +1,8 @@
 # W8 D5: Checkpoint forensics: never trust a load you did not count
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-checkpoint-forensics) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Your audit: `reference/journal/papers/jepa-world-model/AUDIT_W1_LOADS.md`. Book: 6 (trust the
 instrument), 16.1c (the checkpoint-loading bug in the interview). Coding list item 22.
 

@@ -1,5 +1,8 @@
 # W12 D2: comparing several policies honestly
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-2-comparing-several-policies) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/13-evaluation-at-scale.md` §2. You wrote Wilson, McNemar and the paired bootstrap in W6 D2.
 
 ## The one idea

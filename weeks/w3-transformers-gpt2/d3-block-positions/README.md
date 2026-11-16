@@ -1,5 +1,8 @@
 # W3 D3: The transformer block, positions, image patches
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-the-block-positions-image-patches) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/01-transformers-attention.md`. Book: P2.20.
 
 ## Pre-norm block

@@ -1,5 +1,8 @@
 # W4 D4: Conditional flow and classifier-free guidance
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-4-conditioning-and-classifier-free-guidance) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/04-diffusion-flow-matching.md` (CFG). Tomorrow's action head is conditional on
 the observation; a VLA is conditional on images AND an instruction. Today: the condition is a class.
 
