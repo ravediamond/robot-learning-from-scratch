@@ -1,5 +1,8 @@
 # W7 D4: A JEPA world model from pixels: mini LeWM (capstone, part 1)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-4-a-world-model-from-pixels) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 12a.2 (LeWorldModel), 12.3–12.4 (your W1/W2 models). Primers 05, 06.
 World: `pixel_world.py` (32×32 images of a blob that moves with the action). Tools: `jepa_ref.py`
 (SIGReg), `probes_ref.py` (probes, copy-last).

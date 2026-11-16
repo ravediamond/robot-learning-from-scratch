@@ -1,5 +1,8 @@
 # W2 D3: CNN encoders for policies
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-cnn-encoders-for-policies) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: P2.5 (layers), 10a.7 (cameras). Used in ACT, Diffusion Policy, robomimic.
 
 ## Convolution in one line

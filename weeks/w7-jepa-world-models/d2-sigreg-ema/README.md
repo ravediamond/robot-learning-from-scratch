@@ -1,5 +1,8 @@
 # W7 D2: SIGReg (LeWM's regulariser), EMA targets and stop-gradient
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-2-sigreg-ema-targets-stop-gradient) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/05-jepa-ssl.md`. Book: 12a.2 (LeWorldModel), 12.2. Coding list items 14, 15.
 
 ## SIGReg: make the embedding look like N(0, I), one direction at a time

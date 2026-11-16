@@ -1,5 +1,8 @@
 # W1 D3: Autograd
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-autograd) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: P1 (chain rule, `00p1-deep-learning-from-zero.md`), P2.3, P2.19 (a full autograd engine).
 Coding list item 08 (linear forward + manual backward).
 

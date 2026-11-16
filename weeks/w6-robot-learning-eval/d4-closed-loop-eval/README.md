@@ -1,5 +1,8 @@
 # W6 D4: A closed-loop evaluator, and why val loss lies (capstone, part 1)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-4-a-closed-loop-evaluator) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: chapters 3 (baseline), 5 (one factor, three verdicts), 6 (trust the instrument), 7.
 From today, every policy you build is judged by THIS evaluator, not by its loss.
 

@@ -28,7 +28,7 @@ Treat these as the best current bets, and measure yourself (rules 3 and 4 produc
 ## The rules
 
 ### 1. Attempt before help (pretesting, productive struggle)
-Open `predict.md` and the build file's signatures **before** reading the README, and write guesses. Wrong
+Open `predict.md` and the build file's signatures **before** reading the lesson, and write guesses. Wrong
 guesses are fine: unsuccessful attempts still make the following explanation stick better. When a test fails,
 debug **alone for 10 minutes** before asking for a hint. In Shen & Tamkin, the no-AI group hit more errors,
 and those errors are where they learned the debugging that the AI group never learned.
@@ -78,7 +78,7 @@ and ownership tracked retention in the UNSW study.
 |---|---|
 | 0–5 | `review.py` (spaced retrieval). Mondays: the 10-minute delayed recall instead, starting at 0. |
 | 5–10 | Cold attempt: predict.md guesses before reading anything |
-| 10–18 | Read the README |
+| 10–18 | Read the lesson: the day's section of the week page (`weeks/<week>/README.md`) |
 | 18–20 | Run `predict_run.py`, write misses |
 | 20–45 | Build (AI off; 10-minute solo debugging before any hint) |
 | 45–53 | Review file (find the bug, write WHY) |

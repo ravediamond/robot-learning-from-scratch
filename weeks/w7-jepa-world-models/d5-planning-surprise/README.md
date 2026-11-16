@@ -1,5 +1,8 @@
 # W7 D5: Planning with your world model, and surprise (capstone, part 2)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-planning-and-surprise) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 12b (JEPA planning and grounding), 12.4 (three roles), 13.2. Primer 06. Coding list item 23.
 Uses YOUR `../d4-mini-lewm/w7d4_lewm.py` (imported automatically) and `probes_ref.py`.
 

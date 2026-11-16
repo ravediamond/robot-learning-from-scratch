@@ -1,5 +1,8 @@
 # W4 D5: A flow-matching action head vs an MSE head, closed loop (capstone, part 2)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-a-flow-policy-against-an-mse-policy-closed-loop) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 11.1–11.3. World: `sim2d.py` (read it: 60 lines). Demos go around the obstacle, half above,
 half below. Observation = position (2). Action chunk = next H = 8 velocities.
 

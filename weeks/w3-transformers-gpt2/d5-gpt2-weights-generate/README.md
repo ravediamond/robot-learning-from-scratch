@@ -1,5 +1,8 @@
 # W3 D5: Load OpenAI's GPT-2 into YOUR model, generate, train on your book (capstone, part 2)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-load-real-weights-generate-train) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Uses your `../d4-gpt2-model/w3d4_gpt2.py` (imported automatically).
 
 ## Loading someone else's weights: the job you will do for every VLA

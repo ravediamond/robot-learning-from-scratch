@@ -1,5 +1,8 @@
 # W8 D2: Cameras, projection, and hand-eye calibration
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-2-cameras-and-calibration) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 10a.7 (the pinhole model, calibration, why the oblique view distorts).
 
 ## Pinhole camera

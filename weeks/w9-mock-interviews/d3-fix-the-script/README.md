@@ -1,5 +1,7 @@
 # W9 D3: "This training script is broken. Fix it." (45 minutes)
 
+> **Guide for this day:** [`../README.md`](../README.md#day-3-fix-the-script) (the week page: how to run the round, what is scored, where to re-read afterwards).
+
 The debugging round. `broken_bc.py` trains a chunked BC policy on the obstacle-world demos and saves a
 checkpoint for deployment. It runs end to end without an error. It contains **7 planted bugs**, all of
 kinds you met in this course. Some are in data handling, some in training, some in evaluation and saving.

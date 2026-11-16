@@ -1,6 +1,9 @@
 # Curriculum: Part 1 (9 weeks, 45 sessions) and Part 2 (weeks 10–14 and growing)
 
-Each lab: README (concept) → predict.md / predict_run.py → build with tests → review (planted bug) →
+**Where the lessons are:** each week folder has a `README.md` with the full lesson for its five days (weeks 1–9;
+weeks 10–14 point to their primer). Start at `weeks/w1-pytorch-basics/README.md`. This file is only the map.
+
+Each lab: predict.md → the lesson (week page) → predict_run.py → build with tests → review (planted bug) →
 questions.md (out loud). Solutions and model answers: `solutions` branch. After each Friday, write the
 retro in PROGRESS.md: labs get adjusted (easier/harder) from it.
 

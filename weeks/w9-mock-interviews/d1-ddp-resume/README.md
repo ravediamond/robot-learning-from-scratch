@@ -1,5 +1,8 @@
 # W9 D1: Distributed data parallel and checkpoint/resume, by hand (2 CPU processes)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-distributed-training-and-exact-resume) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: P2.12 (checkpoints), P2.13 (DDP, to discuss). Coding list item 24. Asked as "what breaks going
 from 1 to 8 GPUs?" in almost every research-engineer loop. Today you run it for real on CPU (gloo).
 

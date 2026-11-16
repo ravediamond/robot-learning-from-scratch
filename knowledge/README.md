@@ -1,5 +1,9 @@
 # Knowledge primers: the research-discussion round
 
+**You do not need these to do the labs of weeks 1–9.** The lesson for each week is in its own folder
+(`weeks/<week>/README.md`). Primers are the interview layer on top: read one after its week, on a 2-hour day.
+Weeks 10–14 have no full lesson page yet: there, read the primer before day 1.
+
 The coding labs teach your hands. These teach what you must be able to SAY: how the
 models in a VLA + world-model stack work, why they are designed that way, and where they
 break. Each primer is the interview layer; the book in `reference/journal/book/` is the

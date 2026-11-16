@@ -1,5 +1,8 @@
 # W5 D2: VLM plumbing: visual tokens, projector, attention blocks
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-2-vlm-plumbing) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primers: `knowledge/02-vlm.md` (step 2), `03-vla.md`. Book: 11a.1 (SmolVLA).
 
 ## From image to tokens the language model can read

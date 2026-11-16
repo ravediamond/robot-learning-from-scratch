@@ -1,5 +1,8 @@
 # W1 D5: Behavior cloning on a toy SO-101
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-behavior-cloning-on-a-toy-so-101) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: chapters 3 (the baseline is the method), 6 (trust the instrument), P2.8, P2.12.
 Coding list items 16, 20, 21, 22. Your register: the checkpoint-loading audit
 (`reference/journal/papers/jepa-world-model/AUDIT_W1_LOADS.md`).

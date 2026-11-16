@@ -1,5 +1,8 @@
 # W8 D4: Re-derive your own published numbers
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-4-re-derive-your-own-numbers) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 9 (the register), 15 (how decisions were made), 16 (the interview). Your files, not toys:
 - `reference/journal/papers/failure-monitors/results/counts_ci.json`: k/n counts with the Wilson
   intervals your failure-monitors paper reports (judge τ, G16-B, W1-A surprise, G-flora, ...).

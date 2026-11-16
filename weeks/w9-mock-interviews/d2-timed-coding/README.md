@@ -1,5 +1,7 @@
 # W9 D2: Timed mock coding (45 minutes, blank files)
 
+> **Guide for this day:** [`../README.md`](../README.md#day-2-timed-coding) (the week page: how to run the round, what is scored, where to re-read afterwards).
+
 Coding list Tier 1–2 (`reference/journal/book/exercises/coding/README.md`). This is the live-coding round.
 
 ## Protocol (as in the room)

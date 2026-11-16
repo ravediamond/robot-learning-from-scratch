@@ -1,5 +1,8 @@
 # W5 D1: CLIP and SigLIP from scratch
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-clip-and-siglip) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/02-vlm.md` (step 1). The vision tower of every VLA was trained this way.
 
 ## Contrastive losses

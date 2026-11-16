@@ -1,5 +1,7 @@
 # W9 D4: Research discussion mock: paper → experiment → verdict
 
+> **Guide for this day:** [`../README.md`](../README.md#day-4-paper-to-experiment-to-verdict) (the week page: how to run the round, what is scored, where to re-read afterwards).
+
 Book: 1 (start from a decision), 2/2a (translate the claim, read a paper), 3, 4 (pre-registration),
 5 (one factor, three verdicts, the confound checklist), 7. This is the round where your eval background
 should make you stand out. Do it out loud, recorded.

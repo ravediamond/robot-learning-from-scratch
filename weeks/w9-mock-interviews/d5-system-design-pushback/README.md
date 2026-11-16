@@ -1,5 +1,7 @@
 # W9 D5: System design, pushback, and the final retro
 
+> **Guide for this day:** [`../README.md`](../README.md#day-5-system-design-pushback-final-retro) (the week page: how to run the round, what is scored, where to re-read afterwards).
+
 Primers: `knowledge/08-question-bank.md` (sections C and E). Book: 16 (the interview), and
 `reference/journal/book/exercises/interview/` (opener, pushback drills, fault cards).
 

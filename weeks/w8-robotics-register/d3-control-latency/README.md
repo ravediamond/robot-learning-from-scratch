@@ -1,5 +1,8 @@
 # W8 D3: Control loops, latency, and chunk boundaries (a small RTC simulator)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-control-latency-chunk-boundaries) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 10a.4–10a.5 (P/PD/PID, two clocks), 11.4 (real-time execution, the boundary problem), 11a.5 (RTC).
 Coding list item 13. Your edge-inference paper is about exactly this budget.
 

@@ -1,5 +1,8 @@
 # W6 D1: ACT: a conditional VAE over action chunks, plus temporal ensembling
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-act-and-temporal-ensembling) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: 11.2 (chunking). Primer: `knowledge/03-vla.md`. ACT (Zhao et al. 2023) is the classic
 small-data policy (~50 demos) and a LeRobot default for the SO-101.
 

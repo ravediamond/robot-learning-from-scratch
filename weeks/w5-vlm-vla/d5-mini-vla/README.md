@@ -1,5 +1,8 @@
 # W5 D5: A mini VLA from your own parts (capstone)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-a-mini-vla) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primers: `knowledge/03-vla.md`, `02-vlm.md`. Book: 11a.1 (SmolVLA). Parts: your W3 attention and
 Block (copied in `vla_blocks.py`), your W4 flow matching, today's W5 plumbing.
 

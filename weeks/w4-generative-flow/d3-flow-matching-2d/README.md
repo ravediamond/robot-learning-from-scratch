@@ -1,5 +1,8 @@
 # W4 D3: Flow matching from scratch (capstone, part 1)
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-flow-matching) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/04-diffusion-flow-matching.md`. Book: 11.3. Coding list items 11, 12.
 This is the loss and sampler inside SmolVLA's and π0's action expert.
 

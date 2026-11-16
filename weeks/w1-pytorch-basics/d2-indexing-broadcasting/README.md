@@ -1,5 +1,8 @@
 # W1 D2: Indexing, broadcasting, einsum
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-2-indexing-broadcasting-einsum) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: P2.1 (broadcasting), P2.15. Coding list items 05 (masked losses), 20.
 
 ## The one idea

@@ -1,5 +1,8 @@
 # W3 D1: Scaled dot-product attention, by hand
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-scaled-dot-product-attention) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Book: P2.15, P2.20. Primer: `knowledge/01-transformers-attention.md`. Coding list item 01.
 
 ## The one idea
