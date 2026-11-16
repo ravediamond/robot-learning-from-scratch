@@ -1,5 +1,8 @@
 # W14 D3: real-time chunking
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-real-time-chunking) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/15-edge-deployment.md` §3. Paper: Black et al., "Real-Time Execution of Action Chunking Flow Policies" (2025, in your project files). W8 D3 compared naive / shift / blend switching.
 
 ## The one idea

@@ -1,7 +1,7 @@
 # The weeks, in order
 
-One folder per week. **Open the week's `README.md` and follow it**: it holds the full lesson for the five days,
-the order of work, and every command. Nothing outside the week folder is required for weeks 1–9.
+One folder per week. **Open the week's `README.md` and follow it**: it holds the full lesson for the days of the week,
+the order of work, and every command. Nothing outside the week folder is required to do the labs.
 
 ## Part 1: the core (9 weeks, 1 hour a day)
 
@@ -19,7 +19,7 @@ the order of work, and every command. Nothing outside the week folder is require
 
 ## Part 2 (see `../ROADMAP.md`)
 
-These weeks have a short week page and one-page day lessons; read the primer named on the week page before day 1.
+Same format as Part 1. Week 11 has two labs so far.
 
 | Week | Open this | Topic |
 |---|---|---|

@@ -1,5 +1,8 @@
 # W12 D4: latency on the target, and what it does to chunked control
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-4-latency-on-the-target) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/13-evaluation-at-scale.md` §4. Builds on W8 D3 (chunk switching).
 
 ## The one idea

@@ -1,5 +1,8 @@
 # W14 D5: rolling a new policy out to a fleet + design
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-5-fleet-rollout-a-design) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/15-edge-deployment.md` §5.
 
 ## The one idea

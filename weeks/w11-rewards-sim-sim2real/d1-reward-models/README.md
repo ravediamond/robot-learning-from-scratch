@@ -1,5 +1,8 @@
 # W11 D1: Reward models
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-1-reward-models) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/11-reinforcement-learning.md` §7. Papers: HIL-SERL (Luo et al., 2024, success classifiers);
 Robometer (in your project files, trajectory comparisons); GVL / VLM progress estimators.
 

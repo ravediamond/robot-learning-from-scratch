@@ -74,10 +74,10 @@ Then read the knowledge primer for the week (`knowledge/`): interview questions 
 - `ROADMAP.md`: Part 2 tracks and their status
 - `flagship/`: protocol, pre-registration, run sheets and analysis for the 4-policy SO-101 comparison
 - `scripts/review.py`: spaced retrieval over every `questions.md` you finish
-- `weeks/`: the course. One folder per week; each has a `README.md` with the full lesson for the week (weeks 1–9) and one sub-folder per day with the lab. Index: `weeks/README.md`
+- `weeks/`: the course. One folder per week; each has a `README.md` with the full lesson for the week and one sub-folder per day with the lab. Index: `weeks/README.md`
 - `drills/`: LeetCode-style problems, robotics-flavored, with tests
 - `knowledge/`: dense primers (VLM, VLA, JEPA, world models, diffusion, eval) with
-  interview questions. This is the research-discussion round. Not needed to do the labs of weeks 1–9.
+  interview questions. This is the research-discussion round. Not needed to do the labs.
 - `reference/`: your own book, paper drafts and register (snapshot from `road-to-robotics`).
   Labs and primers link into it. The book's live-coding list (`exercises/coding/README.md`)
   is what these labs make runnable, with tests.

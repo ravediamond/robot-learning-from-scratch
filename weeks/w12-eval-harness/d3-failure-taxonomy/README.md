@@ -1,5 +1,8 @@
 # W12 D3: failure taxonomy and where each policy loses
 
+> **Full lesson for this day:** [`../README.md`](../README.md#day-3-failure-taxonomy) (the week page: concepts from zero, examples, traps).
+> This file is the one-page summary. Order of work: `predict.md` → the lesson → `predict_run.py` → the exercise → the review file → `questions.md`.
+
 Primer: `knowledge/13-evaluation-at-scale.md` §3.
 
 ## The one idea
